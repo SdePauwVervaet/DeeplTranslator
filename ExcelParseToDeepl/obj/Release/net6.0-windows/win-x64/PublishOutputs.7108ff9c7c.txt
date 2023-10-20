@@ -1,0 +1,7 @@
+C:\TEMP\publishDeeplParser\ExcelParseToDeepl.pdb
+C:\TEMP\publishDeeplParser\D3DCompiler_47_cor3.dll
+C:\TEMP\publishDeeplParser\PenImc_cor3.dll
+C:\TEMP\publishDeeplParser\PresentationNative_cor3.dll
+C:\TEMP\publishDeeplParser\vcruntime140_cor3.dll
+C:\TEMP\publishDeeplParser\wpfgfx_cor3.dll
+C:\TEMP\publishDeeplParser\ExcelParseToDeepl.exe

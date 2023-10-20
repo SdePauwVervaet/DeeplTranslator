@@ -1,0 +1,7 @@
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\ExcelParseToDeepl.pdb
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\D3DCompiler_47_cor3.dll
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\PenImc_cor3.dll
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\PresentationNative_cor3.dll
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\vcruntime140_cor3.dll
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\wpfgfx_cor3.dll
+\\lan.vervaet.nl\homes\rob.hebing\Desktop\deeplGenerator\ExcelParseToDeepl.exe

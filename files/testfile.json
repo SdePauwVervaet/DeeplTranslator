@@ -1,0 +1,17 @@
+{
+  "en": {
+    "CoolingLiquidLevelTooLow": "red 12 : Cooling liquid level too low.",
+    "CoolingLiquidLevelTooHIGH": "red 16 : Cooling liquid level too high.",
+    "naarfransinhetbos": "The man called \"Frans\" and he loved water"
+  },
+  "de": {
+    "CoolingLiquidLevelTooLow": "rot 12 : Kühlflüssigkeitsstand zu niedrig.",
+    "CoolingLiquidLevelTooHIGH": "rot 16 : Kühlflüssigkeitsstand zu hoch.",
+    "naarfransinhetbos": "Der Mann hieß \"Frans\" und er liebte Wasser"
+  },
+  "es": {
+    "CoolingLiquidLevelTooLow": "bestaande key",
+    "CoolingLiquidLevelTooHIGH": "rojo 16 : Nivel de líquido refrigerante demasiado alto.",
+    "naarfransinhetbos": "El hombre se llamaba \"Frans\" y le encantaba el agua"
+  }
+}

@@ -1,0 +1,66 @@
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.exe
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.deps.json
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.runtimeconfig.json
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.pdb
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DocumentFormat.OpenXml.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\SpreadsheetLight.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.AssemblyReference.cache
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\ExcelParseToDeepl.Form1.resources
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.GenerateResource.cache
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.GeneratedMSBuildEditorConfig.editorconfig
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfoInputs.cache
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfo.cs
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CoreCompileInputs.cache
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CopyComplete
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\refint\DeeplTranslator.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.pdb
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.genruntimeconfig.cache
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\obj\Debug\net6.0-windows\ref\DeeplTranslator.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeepL.net.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.DependencyInjection.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Http.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Http.Polly.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Options.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Primitives.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Newtonsoft.Json.Bson.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Polly.dll
+C:\TEMP\ExcelParseToDeepl - kopie\ExcelParseToDeepl\ExcelParseToDeepl\bin\Debug\net6.0-windows\Polly.Extensions.Http.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.exe
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.deps.json
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.runtimeconfig.json
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeeplTranslator.pdb
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DeepL.net.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\DocumentFormat.OpenXml.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.DependencyInjection.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Http.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Http.Polly.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Options.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Microsoft.Extensions.Primitives.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Newtonsoft.Json.Bson.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Polly.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Polly.Extensions.Http.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\SpreadsheetLight.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.AssemblyReference.cache
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\ExcelParseToDeepl.Form1.resources
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.GenerateResource.cache
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfoInputs.cache
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfo.cs
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CoreCompileInputs.cache
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CopyComplete
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\refint\DeeplTranslator.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.pdb
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.genruntimeconfig.cache
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\ref\DeeplTranslator.dll
