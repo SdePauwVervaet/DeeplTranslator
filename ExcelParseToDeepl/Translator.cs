@@ -1,141 +1,22 @@
-﻿using DeepL;
+﻿using System.Text.RegularExpressions;
+using DeepL;
 using DeepL.Model;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ExcelParseToDeepl
+namespace DeeplTranslator
 {
-
     public class Translator
-
     {
-        DeepL.Translator translator;
-        string[] exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
-
+        private readonly DeepL.Translator _translator;
+        private readonly string[] _exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
         public Translator(string authKey)
         {
-            this.translator = new DeepL.Translator(authKey);
+            this._translator = new DeepL.Translator(authKey);
         }
 
-        public async Task<string> UpdateTranslation(string sourceLanguage, string filepath, Action<string> notificationCallback)//string[] args)
-        {
-            string jsonSource = File.ReadAllText(filepath);
-            jsonSource = jsonSource.Substring(jsonSource.IndexOf('{')); //remove all characters before actual Json structure begins(everything before '{')
-
-            JToken source = JToken.Parse(jsonSource);
-            JToken target = JToken.Parse(jsonSource);
-            JToken compareTo = source.SelectToken(sourceLanguage);
-            string returnString = "";
-
-            foreach (JToken s in source)
-            {
-                string currentLanguage = s.Path.ToString();
-                returnString = ($"Started translating {filepath} to {currentLanguage}");
-
-                if (currentLanguage != sourceLanguage)
-                {
-                    JToken compare = JToken.Parse(jsonSource).SelectToken(currentLanguage);
-                    JToken output = target.SelectToken(currentLanguage);
-
-                    foreach (JProperty c in compareTo)
-                    {
-                        //don't translate engine faults.
-                        if (exceptions.Any(c.Name.Contains))
-                        {
-
-                            Console.WriteLine($"exception found. Not translating {c.Name}");
-                            continue;
-
-                        }
-                        bool translationFound = false;
-                        foreach (JProperty t in compare)
-                        {
-                            if (JToken.DeepEquals(c.Name, t.Name))
-                            {
-                                translationFound = true;
-                                break;
-                            }
-                        }
-
-                        if (!translationFound)
-                        {
-                            var translation = await Translate(c.Value.ToString(), sourceLanguage, currentLanguage, notificationCallback);
-                            output[c.Name] = translation;
-                        }
-                    }
-                }
-            }
-            File.WriteAllText(filepath, target.ToString());
-            returnString += target.ToString();
-            return returnString;
-        }
-
-        public async Task<bool> CheckForExistingGlossary(string GlossaryName)
-        {
-            var glossaries = await translator.ListGlossariesAsync();
-            foreach (var g in glossaries)
-            {
-                if (g.Name.ToUpper() == GlossaryName.ToUpper())
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public async Task<GlossaryInfo> GetGlossaryByName(string GlossaryName)
-        {
-            var glossaries = await translator.ListGlossariesAsync();
-
-            foreach (var g in glossaries)
-            {
-                if (g.Name.ToUpper() == GlossaryName.ToUpper())
-                {
-                    return g;
-                }
-            }
-            return null;
-        }
-
-        public async Task<string> Translate(string translation, string sourceLanguage, string targetLanguage, Action<string> notificationCallback)
-        {
-
-            //System.Diagnostics.Debug.WriteLine(g.Name);
-            string glossaryName = $"{sourceLanguage}-{targetLanguage}";
-            bool useGlossary = await CheckForExistingGlossary(glossaryName);
-            if (useGlossary)
-            {
-                var g = await GetGlossaryByName(glossaryName);
-
-                var translatedText = await translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage,
-                    new TextTranslateOptions { GlossaryId = g.GlossaryId }
-                    );
-                //System.Diagnostics.Debug.WriteLine($"translating with glossary {sourceLanguage}-{targetLanguage} {translation} ||| {translatedText.ToString()}");
-                notificationCallback.Invoke($"translating with glossary {sourceLanguage}-{targetLanguage} {translation} ||| {translatedText.ToString()}");
-                return translatedText.ToString();
-            }
-            else
-            {
-                var translatedText = await translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage
-                );
-                //System.Diagnostics.Debug.WriteLine("translating without glossary");
-                notificationCallback.Invoke($"translating without glossary {sourceLanguage}-{targetLanguage} {translation} ||| {translatedText.ToString()}");
-                return translatedText.ToString();
-            }
-
-            //return translated;
-        }
         public async Task<string> CheckUsage()
         {
-            var usage = await translator.GetUsageAsync();
+            Usage usage = await _translator.GetUsageAsync();
             System.Diagnostics.Debug.WriteLine("Deepl:");
             if (usage.AnyLimitReached)
             {
@@ -151,17 +32,20 @@ namespace ExcelParseToDeepl
             }
         }
 
+        #region Glossaries
+        
         public async Task<string> CheckForGlossaries()
         {
             string returnString = "";
             try
             {
-                var glossaries = await translator.ListGlossariesAsync();
+                var glossaries = await _translator.ListGlossariesAsync();
 
                 System.Diagnostics.Debug.WriteLine("Current glossaries...");
-                for (int i = 0; i < glossaries.Length; i++)
+                foreach (GlossaryInfo glossaryInfo in glossaries)
                 {
-                    returnString += $"Creating {glossaries[i].Name}: Source:{glossaries[i].SourceLanguageCode} Target:{glossaries[i].TargetLanguageCode} Count:{glossaries[i].EntryCount}  \r\n";
+                    returnString +=
+                        $"Creating {glossaryInfo.Name}: Source:{glossaryInfo.SourceLanguageCode} Target:{glossaryInfo.TargetLanguageCode} Count:{glossaryInfo.EntryCount}  \r\n";
                 }
             }
             catch (Exception ex)
@@ -176,16 +60,48 @@ namespace ExcelParseToDeepl
 
             return returnString;
         }
+        private async Task<bool> CheckForExistingGlossary(string glossaryName)
+        {
+            var glossaries = await _translator.ListGlossariesAsync();
+            return glossaries.Any(g => String.Equals(g.Name, glossaryName, StringComparison.CurrentCultureIgnoreCase));
 
+        }
+        private async Task<GlossaryInfo?> GetGlossaryByName(string glossaryName)
+        {
+            GlossaryInfo?[] glossaries = await _translator.ListGlossariesAsync();
+
+            return glossaries.FirstOrDefault(g => String.Equals(g!.Name, glossaryName, StringComparison.CurrentCultureIgnoreCase));
+
+        }
+        public async Task<string> CreateGlossaryFromDictionary(string sourceLanguage, string targetLanguage,
+            Dictionary<string, string> dictionary)
+        {
+            string glossaryName = $"{sourceLanguage}-{targetLanguage}";
+            string returnString;
+            try
+            {
+                GlossaryInfo unused = await _translator.CreateGlossaryAsync(
+                    glossaryName, sourceLanguage, targetLanguage,
+                    new GlossaryEntries(dictionary));
+                returnString = $"Creating Glossary at Deepl{sourceLanguage}-{targetLanguage}";
+            }
+            catch (Exception ex)
+            {
+                returnString = $"Creating a glossary for {targetLanguage} failed {ex.Message}";
+            }
+
+            return returnString;
+        }
         public async Task<string> DeleteGlossaries()
         {
             try
             {
-                var glossaries = await translator.ListGlossariesAsync();
-                for (int i = 0; i < glossaries.Length; i++)
+                var glossaries = await _translator.ListGlossariesAsync();
+                foreach (var glossaryInfo in glossaries)
                 {
-                    await translator.DeleteGlossaryAsync(glossaries[i].GlossaryId);
+                    await _translator.DeleteGlossaryAsync(glossaryInfo.GlossaryId);
                 }
+
                 return "Deleting existing glossaries";
             }
             catch (Exception ex)
@@ -197,102 +113,290 @@ namespace ExcelParseToDeepl
                 System.Diagnostics.Debug.WriteLine("---");
                 return ex.Message;
             }
-
         }
+        
+        #endregion
 
+        #region Translation
 
-
-        public async Task<string> CreateGlossaryFromDictionary(string sourceLanguage, string targetLanguage, Dictionary<string, string> dictionary)
+        private async Task<string> Translate(string translation, string sourceLanguage, string targetLanguage,
+            Func<string, Task> notificationCallback)
         {
-            var entriesDictionary = dictionary;
             string glossaryName = $"{sourceLanguage}-{targetLanguage}";
-            string returnString = "Hi!";
-            try
+            bool useGlossary = await CheckForExistingGlossary(glossaryName);
+            string logMessage = $"{sourceLanguage}: {translation}";
+            TextResult translatedText;
+            if (useGlossary) //Translate with Glossary
             {
-                var glossary = await translator.CreateGlossaryAsync(
-                    glossaryName, sourceLanguage, targetLanguage,
-                    new GlossaryEntries(entriesDictionary));
-                returnString = $"Creating Glossary at Deepl{sourceLanguage}-{targetLanguage}";
-            }
-            catch (Exception ex)
-            {
-                returnString = $"Creating a glossary for {targetLanguage} failed {ex.Message}";
+                GlossaryInfo? g = await GetGlossaryByName(glossaryName);
 
+                translatedText = await _translator.TranslateTextAsync
+                (
+                    translation,
+                    sourceLanguage,
+                    targetLanguage,
+                    new TextTranslateOptions { GlossaryId = g?.GlossaryId }
+                );
+                logMessage += " with glossary";
             }
-            return returnString;
+            else //Translate without Glossary
+            {
+                translatedText = await _translator.TranslateTextAsync
+                (
+                    translation,
+                    sourceLanguage,
+                    targetLanguage
+                );
+                logMessage += " without glossary";
+            }
+
+            await notificationCallback.Invoke($"Translating: {glossaryName}");
+            await notificationCallback.Invoke($"{logMessage}");
+            await notificationCallback.Invoke($"{targetLanguage}: {translatedText}");
+            return translatedText.ToString();
         }
-
-        public async Task<string> UpdateLanguage(string sourceFilename, string targetFileName, string path, Action<string> notificationCallback)
+        public async Task<string> UpdateTranslation(string sourceLanguage, string filepath,
+            Func<string, Task> notificationCallback)
         {
-            string sourceLanguage = "EN";
-            string targetLanguage = targetFileName.Substring(0, 2).ToUpper();
-            string jsonSource = File.ReadAllText(path + "//" + sourceFilename);
-            string startString = jsonSource.Substring(0, jsonSource.IndexOf('{')); //remove all characters before actual Json structure begins(everything before '{')
-            jsonSource = jsonSource.Substring(jsonSource.IndexOf('{')); //remove all characters before actual Json structure begins(everything before '{')
-            jsonSource = jsonSource.Substring(0, jsonSource.LastIndexOf('}') + 1); //remove all characters after closing accolade
+            // Read the JSON content from the file
+            string jsonSource = await File.ReadAllTextAsync(filepath);
 
-            string jsonTarget = File.ReadAllText(path + "//" + targetFileName);
-            if (!string.IsNullOrEmpty(jsonTarget))
-            {
-                jsonTarget = jsonTarget.Substring(jsonTarget.IndexOf('{')); //remove all characters before actual Json structure begins(everything before '{')
-                jsonTarget = jsonTarget.Substring(0, jsonTarget.LastIndexOf('}') + 1); //remove all characters after closing accolade
-            }
-            else
-            {
-                jsonTarget = "{}";
-            }
-            JObject source = JObject.Parse(jsonSource);
-            JObject target = JObject.Parse(jsonTarget);
+            JToken source = JToken.Parse(jsonSource);
+            JToken target = JToken.Parse(jsonSource);
+
             JToken compareTo = source.SelectToken(sourceLanguage);
-            string returnString = "";
-            string csvString = "";
 
-            using (var reader = new JsonTextReader(new StringReader(jsonSource)))
+            string returnString = $"Started translating {filepath} to {sourceLanguage}";
+
+            foreach (JToken? sourceLanguageToken in source)
             {
-                while (reader.Read())
+                string currentLanguage = sourceLanguageToken.Path;
+
+                if (currentLanguage != sourceLanguage)
                 {
+                    JToken compare = source.SelectToken(currentLanguage);
+                    JToken output = target.SelectToken(currentLanguage);
 
-                    //check entry
-                    if (reader.TokenType == JsonToken.String &&
-                        (reader.TokenType != JsonToken.StartObject &&
-                        reader.TokenType != JsonToken.EndObject)
-                    )
+                    foreach (JProperty sourceProperty in compareTo.Children<JProperty>())
                     {
-                        var dateAndTime = DateTime.Now;
-                        string logString = "";
+                        // Don't translate engine faults or exceptions
+                        if (_exceptions.Any(exception => sourceProperty.Name.Contains(exception)))
+                        {
+                            Console.WriteLine($@"Exception found. Not translating {sourceProperty.Name}");
+                            continue;
+                        }
 
-                        //unknown in target
-                        if (target.SelectToken(reader.Path) == null)
+                        bool translationFound = compare.Children<JProperty>().Any(targetProperty =>
+                            JToken.DeepEquals(sourceProperty.Name, targetProperty.Name));
+
+                        if (!translationFound)
                         {
-                            string filename = $"{path}\\{dateAndTime.ToShortDateString()}-log.csv";
-                            var translation = await Translate(reader.Value.ToString(), sourceLanguage, targetLanguage, notificationCallback);
-                            AddToJObject(target, reader.Path.Split('.'), translation);
-                            System.Diagnostics.Debug.WriteLine($"--- Translated {reader.Path} {reader.Value} {target.SelectToken(reader.Path)}");
-                            logString = $"{dateAndTime};{sourceLanguage};{targetLanguage}; {reader.Path}; {reader.Value}; {target.SelectToken(reader.Path)} \n";
-                            File.AppendAllText(filename, logString + Environment.NewLine);
+                            string translation = await Translate(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage,
+                                currentLanguage, notificationCallback);
+                            output[sourceProperty.Name] = translation;
                         }
-                        //known in target
-                        else
-                        {
-                            logString = $"{dateAndTime};{sourceLanguage};{targetLanguage}; {reader.Path}; {reader.Value}; {target.SelectToken(reader.Path)} \n";
-                        }
-                        csvString += logString;
                     }
                 }
+            }
+
+            // Update the file with the translated JSON
+            await File.WriteAllTextAsync(filepath, target.ToString());
+
+            return returnString + target;
+        }
+        public async Task<string> UpdateLanguage(string sourceFilename, string targetFileName, string path,
+            Func<string, Task> notificationCallback)
+        {
+            string sourceLanguage = "EN";
+            await notificationCallback.Invoke($"Source Path: {path}\\{sourceFilename}");
+            await notificationCallback.Invoke($"Target Path: {path}\\{targetFileName}");
+
+            // Determine the target language based on the target file name
+            string targetLanguage = targetFileName.Substring(0, 2).ToUpper();
+
+            var (jsonSource, startString) = ReadAndCleanJson(Path.Combine(path, sourceFilename), true);
+            var jsonTarget = ReadAndCleanJson(Path.Combine(path, targetFileName));
+
+            // Parse the JSON content into JObject instances
+            JObject source = JObject.Parse(jsonSource);
+            JObject target = JObject.Parse(jsonTarget);
+
+            string csvString = "";
+            string returnString = "";
+            DateTime dateAndTime = DateTime.Now;
+
+            var translationExceptions = new Dictionary<string, List<string>>();
+
+            // Process the JSON structure
+            foreach (var token in source.Descendants().Where(t => t.Type == JTokenType.String))
+            {
+                var pathToToken = token.Path;
+                string tokenValue = token.Value<string>();
+
+                if (token.Value<string>().Contains("{{") && token.Value<string>().Contains("}}"))
+                {
+                    // Extract {{exception}} parts and store them
+                    var examples = ExtractExceptions(tokenValue);
+                    translationExceptions[pathToToken] = examples;
+                }
+
+                string logString;
+
+                if (target.SelectToken(pathToToken) == null)
+                {
+                    string translation =
+                        await Translate(tokenValue, sourceLanguage, targetLanguage, notificationCallback);
+
+                    //Check if there are any translation exceptions in the bucket.
+                    if (translationExceptions.TryGetValue(pathToToken, out var exceptions))
+                    {
+                        translation = ReplaceExceptions(translation, exceptions, notificationCallback);
+                    }
+
+                    AddToJObject(target, pathToToken.Split('.'), translation);
+
+                    logString =
+                        $"{dateAndTime};{sourceLanguage};{targetLanguage}; {pathToToken}; {token.Value<string>()}; {target.SelectToken(pathToToken)}";
+                    System.Diagnostics.Debug.WriteLine($"--- Translated {logString}");
+                    logString += Environment.NewLine;
+                    await File.AppendAllTextAsync(Path.Combine(path, $"{dateAndTime.ToShortDateString()}-log.csv"), logString);
+                }
+                else
+                {
+                    logString =
+                        $"{dateAndTime};{sourceLanguage};{targetLanguage}; {pathToToken}; {token.Value<string>()}; {target.SelectToken(pathToToken)}";
+                    logString += Environment.NewLine;
+                    await notificationCallback(logString);
+                }
+
+                csvString += logString;
             }
 
             //clean up the target file. Remove all keys in the target file which is not in the source file (great for removing/updating a key)
             RemoveMissingKeys(target, source);
 
             //write json
-            File.WriteAllText($"{path}//{targetFileName}", startString + target.ToString());
+            string cleanTarget = startString + FormatTypeScript(target.ToString() ?? string.Empty);
+            await File.WriteAllTextAsync(Path.Combine(path, targetFileName),  cleanTarget);
             //write csv
-            File.WriteAllText($"{path}//{sourceLanguage}-{targetLanguage}.csv", csvString);
-            returnString += target.ToString();
+            await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
+            returnString += cleanTarget;
             return returnString;
         }
+        
+        #region Cleanup Crew
 
-        public void AddToJObject(JObject jObject, string[] keys, JToken value)
+        private List<string> ExtractExceptions(string input) // Extract and store {{Exception}} parts from a string
+        {
+            List<string> translationExceptions = new List<string>();
+            // Define a regular expression pattern to match {{Exception}} parts
+            const string pattern = @"\{\{(.+?)\}\}";
+
+            MatchCollection matches = Regex.Matches(input, pattern);
+            foreach (Match match in matches)
+            {
+                translationExceptions.Add(match.Value); // Capture the content
+            }
+
+            return translationExceptions;
+        }
+        private string RemoveExceptions(string input) // Remove {{Exception}} parts from a string for translation
+        {
+            // Define a regular expression pattern to match {{Exception}} parts
+            const string pattern = @"\{\{.+?\}\}";
+
+            return Regex.Replace(input, pattern, "");
+        }
+        private string ReplaceExceptions(string translation, List<string> translationExceptions,
+            Func<string, Task> notificationCallback) // Replace {{Exception}} parts in the translation with the stored values
+        {
+            // Define a regular expression pattern to match placeholders for replacement
+            const string pattern = @"\{\{(.+?)\}\}";
+
+            MatchCollection matches = Regex.Matches(translation, pattern);
+            int index = 0;
+            foreach (object? match in matches)
+            {
+                if (index < translationExceptions.Count)
+                {
+                    string exception = translationExceptions[index];
+                    translation = Regex.Replace(translation, matches[index].Value, $"{exception}");
+                    notificationCallback.Invoke($"Replaced key: {matches[index].Value} -> {exception}");
+                    index++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return translation;
+        }
+
+        private string FormatTypeScript(string jsonText)
+        {
+            string pattern = "\"([^\"]+)\":";
+            string newJsonText = Regex.Replace(jsonText, pattern, "$1:");
+
+            return newJsonText;
+        }
+        private static string ReadAndCleanJson(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string jsonContent = File.ReadAllText(filePath);
+
+                int startIndex = jsonContent.IndexOf('{');
+                int endIndex = jsonContent.LastIndexOf('}');
+
+                if (startIndex >= 0 && endIndex >= 0)
+                {
+                    return jsonContent.Substring(startIndex, endIndex - startIndex + 1);
+                }
+            }
+
+            // If the file doesn't exist or there are no valid JSON braces, return an empty JSON object
+            return "{}";
+        }
+        private static (string, string) ReadAndCleanJson(string filePath, bool needStartString)
+        {
+            if (File.Exists(filePath))
+            {
+                string jsonContent = File.ReadAllText(filePath);
+
+                var startString = jsonContent.Substring(0, jsonContent.IndexOf('{'));
+
+                int startIndex = jsonContent.IndexOf('{');
+                int endIndex = jsonContent.LastIndexOf('}');
+
+                if (startIndex >= 0 && endIndex >= 0)
+                {
+                    return (jsonContent.Substring(startIndex, endIndex - startIndex + 1), startString);
+                }
+            }
+
+            // If the file doesn't exist or there are no valid JSON braces, return an empty JSON object
+            return ("{}", "");
+        }
+
+        private static void RemoveMissingKeys(JObject target, JObject source)
+        {
+            foreach (JProperty? prop1 in target.Properties().ToList())
+            {
+                if (source[prop1.Name] == null)
+                {
+                    prop1.Remove();
+                }
+                else if (prop1.Value.Type == JTokenType.Object)
+                {
+                    RemoveMissingKeys((JObject)prop1.Value, (JObject)source[prop1.Name]);
+                }
+            }
+        }
+        
+        #endregion
+
+        private void AddToJObject(JObject jObject, string[] keys, JToken value)
         {
             if (keys.Length == 1)
             {
@@ -305,27 +409,16 @@ namespace ExcelParseToDeepl
                 {
                     jObject[key] = new JObject();
                 }
-                AddToJObject(jObject[key] as JObject, keys.Skip(1).ToArray(), value);
-            }
-        }
-        public static void RemoveMissingKeys(JObject obj1, JObject obj2)
-        {
-            foreach (var prop1 in obj1.Properties().ToList())
-            {
-                if (obj2[prop1.Name] == null)
-                {
-                    prop1.Remove();
-                }
-                else if (prop1.Value.Type == JTokenType.Object)
-                {
-                    RemoveMissingKeys((JObject)prop1.Value, (JObject)obj2[prop1.Name]);
-                }
-            }
-        }
 
-        public async Task<JToken> GetNodes()
-        {
-            return null;
+                AddToJObject((jObject[key] as JObject)!, keys.Skip(1).ToArray(), value);
+            }
         }
+        
+        #endregion
+
+        // public async Task<JToken?> GetNodes()
+        // {
+        //     return null;
+        // }
     }
 }

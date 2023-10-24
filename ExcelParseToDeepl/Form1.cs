@@ -1,3 +1,5 @@
+using DeeplTranslator;
+
 namespace ExcelParseToDeepl
 {
     public partial class Form1 : Form
@@ -135,6 +137,7 @@ namespace ExcelParseToDeepl
                 textBox3.Select(textBox3.Text.Length - 1, 0);
                 textBox3.ScrollToCaret();
                 textBox3.Update();
+                return Task.CompletedTask;
             });
         }
 
@@ -163,6 +166,7 @@ namespace ExcelParseToDeepl
                 textBox3.Select(textBox3.Text.Length - 1, 0);
                 textBox3.ScrollToCaret();
                 textBox3.Update();
+                return Task.CompletedTask;
             });
         }
 

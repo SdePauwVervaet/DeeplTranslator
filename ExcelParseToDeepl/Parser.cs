@@ -1,8 +1,7 @@
-﻿using DeeplTranslator;
+﻿using ExcelParseToDeepl;
 using SpreadsheetLight;
 
-
-namespace ExcelParseToDeepl
+namespace DeeplTranslator
 {
     internal class Parser
     {
@@ -18,8 +17,7 @@ namespace ExcelParseToDeepl
             translator = new Translator(DeeplAuthKey);
         }
 
-
-        public async Task TranslateAlertFiles(List<string> files, Action<string> notificationCallback)
+        public async Task TranslateAlertFiles(List<string> files, Func<string, Task> notificationCallback)
         {
             foreach (string file in files)
             {
@@ -27,7 +25,7 @@ namespace ExcelParseToDeepl
             }
         }
 
-        public async Task TranslateLanguageFiles(List<string> files, Action<string> notificationCallback)
+        public async Task TranslateLanguageFiles(List<string> files, Func<string, Task> notificationCallback)
         {
             foreach (string file in files)
             {
