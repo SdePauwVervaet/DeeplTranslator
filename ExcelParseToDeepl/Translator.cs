@@ -117,44 +117,9 @@ namespace DeeplTranslator
         
         #endregion
 
-        #region Translation
+#region Translation
 
-        private async Task<string> Translate(string translation, string sourceLanguage, string targetLanguage,
-            Func<string, Task> notificationCallback)
-        {
-            string glossaryName = $"{sourceLanguage}-{targetLanguage}";
-            bool useGlossary = await CheckForExistingGlossary(glossaryName);
-            string logMessage = $"{sourceLanguage}: {translation}";
-            TextResult translatedText;
-            if (useGlossary) //Translate with Glossary
-            {
-                GlossaryInfo? g = await GetGlossaryByName(glossaryName);
-
-                translatedText = await _translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage,
-                    new TextTranslateOptions { GlossaryId = g?.GlossaryId }
-                );
-                logMessage += " with glossary";
-            }
-            else //Translate without Glossary
-            {
-                translatedText = await _translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage
-                );
-                logMessage += " without glossary";
-            }
-
-            await notificationCallback.Invoke($"Translating: {glossaryName}");
-            await notificationCallback.Invoke($"{logMessage}");
-            await notificationCallback.Invoke($"{targetLanguage}: {translatedText}");
-            return translatedText.ToString();
-        }
+        // Update translation alerts
         public async Task<string> UpdateTranslation(string sourceLanguage, string filepath,
             Func<string, Task> notificationCallback)
         {
@@ -204,6 +169,7 @@ namespace DeeplTranslator
 
             return returnString + target;
         }
+        // Update connect language files
         public async Task<string> UpdateLanguage(string sourceFilename, string targetFileName, string path,
             Func<string, Task> notificationCallback)
         {
@@ -247,7 +213,7 @@ namespace DeeplTranslator
                     string translation =
                         await Translate(tokenValue, sourceLanguage, targetLanguage, notificationCallback);
 
-                    //Check if there are any translation exceptions in the bucket.
+                    // Check if there are any translation exceptions in the bucket.
                     if (translationExceptions.TryGetValue(pathToToken, out var exceptions))
                     {
                         translation = ReplaceExceptions(translation, exceptions, notificationCallback);
@@ -266,7 +232,6 @@ namespace DeeplTranslator
                     logString =
                         $"{dateAndTime};{sourceLanguage};{targetLanguage}; {pathToToken}; {token.Value<string>()}; {target.SelectToken(pathToToken)}";
                     logString += Environment.NewLine;
-                    await notificationCallback(logString);
                 }
 
                 csvString += logString;
@@ -281,12 +246,51 @@ namespace DeeplTranslator
             //write csv
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
             returnString += cleanTarget;
+            await notificationCallback("Translation finished!");
             return returnString;
         }
+        private async Task<string> Translate(string translation, string sourceLanguage, string targetLanguage,
+            Func<string, Task> notificationCallback)
+        {
+            DateTime translationStartTime = DateTime.Now;
+            string glossaryName = $"{sourceLanguage}-{targetLanguage}";
+            bool useGlossary = await CheckForExistingGlossary(glossaryName);
+            string logMessage = $"{sourceLanguage}: {translation}";
+            TextResult translatedText;
+            if (useGlossary) //Translate with Glossary
+            {
+                GlossaryInfo? g = await GetGlossaryByName(glossaryName);
+
+                translatedText = await _translator.TranslateTextAsync
+                (
+                    translation,
+                    sourceLanguage,
+                    targetLanguage,
+                    new TextTranslateOptions { GlossaryId = g?.GlossaryId }
+                );
+                logMessage += " with glossary";
+            }
+            else //Translate without Glossary
+            {
+                translatedText = await _translator.TranslateTextAsync
+                (
+                    translation,
+                    sourceLanguage,
+                    targetLanguage
+                );
+                logMessage += " without glossary";
+            }
+            TimeSpan translationTime = DateTime.Now - translationStartTime;
+            await notificationCallback.Invoke($"Translating: {glossaryName} Translation Time: {translationTime}");
+            await notificationCallback.Invoke($"{logMessage}");
+            await notificationCallback.Invoke($"{targetLanguage}: {translatedText}");
+            return translatedText.ToString();
+        }
+        
         
         #region Cleanup Crew
 
-        private List<string> ExtractExceptions(string input) // Extract and store {{Exception}} parts from a string
+        private static List<string> ExtractExceptions(string input) // Extract and store {{Exception}} parts from a string
         {
             List<string> translationExceptions = new List<string>();
             // Define a regular expression pattern to match {{Exception}} parts
@@ -300,15 +304,14 @@ namespace DeeplTranslator
 
             return translationExceptions;
         }
-        private string RemoveExceptions(string input) // Remove {{Exception}} parts from a string for translation
+        private static string RemoveExceptions(string input) // Remove {{Exception}} parts from a string for translation
         {
             // Define a regular expression pattern to match {{Exception}} parts
             const string pattern = @"\{\{.+?\}\}";
 
             return Regex.Replace(input, pattern, "");
         }
-        private string ReplaceExceptions(string translation, List<string> translationExceptions,
-            Func<string, Task> notificationCallback) // Replace {{Exception}} parts in the translation with the stored values
+        private static string ReplaceExceptions(string translation, List<string> translationExceptions, Func<string, Task> notificationCallback) // Replace {{Exception}} parts in the translation with the stored values
         {
             // Define a regular expression pattern to match placeholders for replacement
             const string pattern = @"\{\{(.+?)\}\}";
@@ -332,8 +335,7 @@ namespace DeeplTranslator
 
             return translation;
         }
-
-        private string FormatTypeScript(string jsonText)
+        private static string FormatTypeScript(string jsonText)
         {
             string pattern = "\"([^\"]+)\":";
             string newJsonText = Regex.Replace(jsonText, pattern, "$1:");
@@ -378,7 +380,6 @@ namespace DeeplTranslator
             // If the file doesn't exist or there are no valid JSON braces, return an empty JSON object
             return ("{}", "");
         }
-
         private static void RemoveMissingKeys(JObject target, JObject source)
         {
             foreach (JProperty? prop1 in target.Properties().ToList())
@@ -414,7 +415,7 @@ namespace DeeplTranslator
             }
         }
         
-        #endregion
+#endregion
 
         // public async Task<JToken?> GetNodes()
         // {

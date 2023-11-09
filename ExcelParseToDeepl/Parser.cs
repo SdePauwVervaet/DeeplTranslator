@@ -1,53 +1,46 @@
-﻿using ExcelParseToDeepl;
-using SpreadsheetLight;
+﻿using SpreadsheetLight;
 
 namespace DeeplTranslator
 {
     internal class Parser
     {
-        SLDocument wb = new SLDocument();
-        SLWorksheetStatistics stats = new SLWorksheetStatistics();
-        string filePath = "";
-        List<Glossary> translationList = new List<Glossary> { };
-        string DeeplAuthKey = "059d0c16-9fed-8d68-544b-2b9d0413c4b3:fx";
-        Translator translator;
-
-        public Parser()
-        {
-            translator = new Translator(DeeplAuthKey);
-        }
+        private SLDocument _wb = new SLDocument();
+        private SLWorksheetStatistics _stats = new SLWorksheetStatistics();
+        private string _filePath = "";
+        private readonly List<Glossary> _translationList = new List<Glossary>();
+        private const string DeeplAuthKey = "059d0c16-9fed-8d68-544b-2b9d0413c4b3:fx";
+        private readonly Translator _translator = new Translator(DeeplAuthKey);
 
         public async Task TranslateAlertFiles(List<string> files, Func<string, Task> notificationCallback)
         {
             foreach (string file in files)
             {
-                notificationCallback.Invoke(await translator.UpdateTranslation("en", file, notificationCallback));
+                await notificationCallback.Invoke(await _translator.UpdateTranslation("en", file, notificationCallback));
             }
         }
-
+        // Translate connect language files
         public async Task TranslateLanguageFiles(List<string> files, Func<string, Task> notificationCallback)
         {
             foreach (string file in files)
             {
                 string targetFileName = file.Substring(file.Length - 8).ToLower();
-                string sourceFileName = "en-gb.js";
-                string path = Path.GetDirectoryName(file);
+                const string sourceFileName = "en-gb.js";
+                string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
 
-                if (!targetFileName.Equals(sourceFileName))
-                {
-                    notificationCallback.Invoke(await translator.UpdateLanguage(sourceFileName, targetFileName, path, notificationCallback));
+                if (targetFileName.Equals(sourceFileName)) continue;
+                
+                await _translator.UpdateLanguage(sourceFileName, targetFileName, path, notificationCallback);
 
-                    System.Diagnostics.Debug.WriteLine(targetFileName);
-                }
+                System.Diagnostics.Debug.WriteLine(targetFileName);
             }
         }
 
         public void ParseExcel(string path, string fileName)
         {
-            filePath = path;
-            MemoryStream ms = LoadStream($"{filePath}/{fileName}");
-            wb = new SLDocument(ms);
-            stats = wb.GetWorksheetStatistics();
+            _filePath = path;
+            MemoryStream ms = LoadStream($"{_filePath}/{fileName}");
+            _wb = new SLDocument(ms);
+            _stats = _wb.GetWorksheetStatistics();
 
         }
 
@@ -55,43 +48,45 @@ namespace DeeplTranslator
         {
             notificationCallback.Invoke("Generating!");
 
-            for (int c = 1; c < stats.NumberOfColumns; c++)
+            for (int c = 1; c < _stats.NumberOfColumns; c++)
             {
-                Glossary glossary = new Glossary();
-                //Dictionary<string,string> dictionary = new Dictionary<string, string>();
-                Dictionary<string, string> duplicateEntries = new Dictionary<string, string>();
+                var duplicateEntries = new Dictionary<string, string>();
 
-                string sourceKey = wb.GetCellValueAsString(1, 1);
-                string targetKey = wb.GetCellValueAsString(1, c + 1);
+                string sourceKey = _wb.GetCellValueAsString(1, 1);
+                string targetKey = _wb.GetCellValueAsString(1, c + 1);
+                var glossary = new Glossary(sourceKey, targetKey);
                 notificationCallback.Invoke($"Generating glossary {sourceKey}-{targetKey}" + Environment.NewLine);
 
-                for (int i = 2; i <= stats.NumberOfRows; i++)
+                for (int i = 2; i <= _stats.NumberOfRows; i++)
                 {
                     glossary.SourceLanguage = sourceKey;
                     glossary.TargetLanguage = targetKey;
-                    Translation translation = new Translation();
-                    translation.SourceKey = sourceKey;
-                    translation.TargetKey = targetKey;
-                    translation.SourceText = wb.GetCellValueAsString(i, 1).Trim();
-                    translation.TargetText = wb.GetCellValueAsString(i, c + 1).Trim();
-
-                    if (translation.Check())
+                    var translation = new Translation
                     {
-                        bool canAdd = glossary.Translations.TryAdd(translation.SourceText, translation.TargetText);
-                        if (!canAdd)
-                        {
-                            duplicateEntries.Add($"{i}_{translation.SourceText}", translation.TargetText);
-                        }
-                        notificationCallback.Invoke($"Added {translation.SourceText}, {translation.TargetText}, {translation.SourceText} to dictionary");
+                        SourceKey = sourceKey,
+                        TargetKey = targetKey,
+                        SourceText = _wb.GetCellValueAsString(i, 1).Trim(),
+                        TargetText = _wb.GetCellValueAsString(i, c + 1).Trim()
+                    };
+
+                    if (!translation.Check()) continue;
+                    
+                    bool canAdd = glossary.Translations.TryAdd(translation.SourceText, translation.TargetText);
+                    if (!canAdd)
+                    {
+                        duplicateEntries.Add($"{i}_{translation.SourceText}", translation.TargetText);
                     }
+                    notificationCallback.Invoke($"Added {translation.SourceText}, {translation.TargetText}, {translation.SourceText} to dictionary");
                 }
                 notificationCallback("Writing glossary and glossary DUPLICATES files..." + Environment.NewLine);
+                
                 //create glossary file
-                WriteCSV(filePath, sourceKey, targetKey, glossary.Translations);
+                WriteCsv(_filePath, sourceKey, targetKey, glossary.Translations);
+                
                 //create overview of duplicates file
-                WriteCSV(filePath, $"Duplicates-{sourceKey}", $"Duplicates-{targetKey}", duplicateEntries);
+                WriteCsv(_filePath, $"Duplicates-{sourceKey}", $"Duplicates-{targetKey}", duplicateEntries);
 
-                translationList.Add(glossary);
+                _translationList.Add(glossary);
 
             }
             //UpdateDeeplGlossary();
@@ -99,21 +94,21 @@ namespace DeeplTranslator
         public async void UpdateDeeplGlossary(Action<string> notificationCallback)
         {
             //get current usage and prompt user
-            notificationCallback.Invoke(await translator.CheckUsage() + Environment.NewLine);
+            notificationCallback.Invoke(await _translator.CheckUsage() + Environment.NewLine);
 
 
             //delete all existing glossaries
-            notificationCallback.Invoke(await translator.DeleteGlossaries() + Environment.NewLine);
+            notificationCallback.Invoke(await _translator.DeleteGlossaries() + Environment.NewLine);
 
             //create glossaries
-            foreach (Glossary glossary in translationList)
+            foreach (Glossary glossary in _translationList)
             {
                 //notificationCallback.Invoke(
-                notificationCallback.Invoke(await translator.CreateGlossaryFromDictionary(glossary.SourceLanguage, glossary.TargetLanguage, glossary.Translations));
+                notificationCallback.Invoke(await _translator.CreateGlossaryFromDictionary(glossary.SourceLanguage, glossary.TargetLanguage, glossary.Translations));
             }
 
             //Show current glossaries
-            notificationCallback.Invoke(await translator.CheckForGlossaries() + Environment.NewLine);
+            notificationCallback.Invoke(await _translator.CheckForGlossaries() + Environment.NewLine);
             notificationCallback.Invoke($"~~~Done with glossaries~~~" + Environment.NewLine);
         }
 
@@ -122,24 +117,20 @@ namespace DeeplTranslator
         {
             using var inStream = new FileStream(filePath, FileMode.Open,
                               FileAccess.Read, FileShare.ReadWrite);
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
             inStream.CopyTo(ms);
             ms.Position = 0;
 
             return ms;
         }
 
-        private static void WriteCSV(string filePath, string sourceKey, string targetKey, Dictionary<string, string> dictionary)
+        private static void WriteCsv(string filePath, string sourceKey, string targetKey, Dictionary<string, string> dictionary)
         {
             string path = filePath + "/" + sourceKey + "-" + targetKey + ".csv";
-            string lineToWrite = "";
-            foreach (var kvp in dictionary)
-            {
-                lineToWrite += $"\"{kvp.Key}\",\"{kvp.Value}\",\"{sourceKey}\",\"{targetKey}\"\n";
-            }
+            string lineToWrite = dictionary.Aggregate("", (current, kvp) => current + $"\"{kvp.Key}\",\"{kvp.Value}\",\"{sourceKey}\",\"{targetKey}\"\n");
             if (!String.IsNullOrEmpty(lineToWrite))
             {
-                System.IO.File.WriteAllText(path, lineToWrite);
+                File.WriteAllText(path, lineToWrite);
             }
             System.Diagnostics.Debug.WriteLine(path);
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExcelParseToDeepl
+﻿namespace DeeplTranslator
 {
 
     public class Translation
@@ -14,32 +8,17 @@ namespace ExcelParseToDeepl
         public string? SourceText;
         public string? TargetText;
 
-        public Translation()
-        {
-        }
-
         public bool Check()
         {
-            if (String.IsNullOrWhiteSpace(SourceKey) ||
-                String.IsNullOrWhiteSpace(TargetKey) || 
-                String.IsNullOrWhiteSpace(SourceText) ||
-                String.IsNullOrWhiteSpace(TargetText))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return !String.IsNullOrWhiteSpace(SourceKey) &&
+                   !String.IsNullOrWhiteSpace(TargetKey) && 
+                   !String.IsNullOrWhiteSpace(SourceText) &&
+                   !String.IsNullOrWhiteSpace(TargetText);
         }
 
         public string Format()
         {
             return ($"\"{ SourceText}\",\"{ TargetText}\",\"{ SourceKey}\",\"{ TargetKey}\"");
         }
-
-
-
-        
     }
 }

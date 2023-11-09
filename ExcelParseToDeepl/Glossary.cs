@@ -10,11 +10,13 @@ namespace DeeplTranslator
     {
         public string SourceLanguage;
         public string TargetLanguage;
-        public Dictionary<string, string> Translations;
+        public readonly Dictionary<string, string> Translations;
 
-        public Glossary()
+        public Glossary(string sourceLanguage, string targetLanguage)
         {
-            Translations= new Dictionary<string, string>();
+            SourceLanguage = sourceLanguage;
+            TargetLanguage = targetLanguage;
+            Translations = new Dictionary<string, string>();
         }
     }
 }
