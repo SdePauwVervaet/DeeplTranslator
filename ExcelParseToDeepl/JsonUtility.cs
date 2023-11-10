@@ -56,7 +56,7 @@ namespace DeeplTranslator
         
         public string FormatTypeScript(string jsonText)
         {
-            string pattern = "\"([^\"]+)\":";
+            const string pattern = "\"([^\"]+)\":";
             string newJsonText = Regex.Replace(jsonText, pattern, "$1:");
 
             return newJsonText;
@@ -119,7 +119,6 @@ namespace DeeplTranslator
 
         public string UpdateTargetTranslationsOrder(string sourceJson, string targetJson, string targetFileName)
         {
-        // Parse JSON strings into JObjects
         JObject sourceObject = JObject.Parse(sourceJson);
         JObject targetObject = JObject.Parse(targetJson);
 
@@ -140,46 +139,47 @@ namespace DeeplTranslator
         JObject newTargetTranslations = new JObject();
 
         // Iterate through the source order and add properties to the target in the same order
-        foreach (var key in sourceOrder.Keys)
+        foreach (string key in sourceOrder.Keys.Where(key => targetTranslations.ContainsKey(key)))
         {
-            if (targetTranslations.ContainsKey(key))
+            if (sourceOrder[key].Type == JTokenType.Object)
             {
-                if (sourceOrder[key].Type == JTokenType.Object)
+                // Handle nested properties
+                var nestedSource = (JObject)sourceOrder[key];
+                var nestedTarget = (JObject)targetTranslations[key];
+
+                var nestedOrder = new JObject();
+
+                foreach (var nestedKey in nestedSource.Properties().Select(p => p.Name))
                 {
-                    // Handle nested properties
-                    var nestedSource = (JObject)sourceOrder[key];
-                    var nestedTarget = (JObject)targetTranslations[key];
-
-                    var nestedOrder = new JObject();
-
-                    foreach (var nestedKey in nestedSource.Properties().Select(p => p.Name))
+                    if (nestedTarget.ContainsKey(nestedKey))
                     {
-                        if (nestedTarget.ContainsKey(nestedKey))
-                        {
-                            nestedOrder[nestedKey] = nestedTarget[nestedKey];
-                        }
+                        nestedOrder[nestedKey] = nestedTarget[nestedKey];
                     }
+                }
 
-                    newTargetTranslations[key] = nestedOrder;
-                }
-                else
-                {
-                    newTargetTranslations[key] = targetTranslations[key];
-                }
+                newTargetTranslations[key] = nestedOrder;
+            }
+            else
+            {
+                newTargetTranslations[key] = targetTranslations[key];
             }
         }
 
-        // Update the targetObject with the new translations
         targetObject["translations"] = newTargetTranslations;
         
-        // Move the key property to the top
         var keyProperty = targetObject.Property("key");
         keyProperty.Remove();
-        var fileName = $"{Path.GetFileNameWithoutExtension(targetFileName)?.Substring(0, 2).ToLower()}-{Path.GetFileNameWithoutExtension(targetFileName)?.Substring(3).ToUpper()}";
-        targetObject.AddFirst(new JProperty("key", Path.GetFileNameWithoutExtension(fileName)));
+        targetObject.AddFirst(new JProperty("key", FormatTargetKey(targetFileName)));
 
-        // Convert the updated targetObject back to JSON
         return targetObject.ToString(Formatting.Indented);
-    }
+        }
+        
+        private string FormatTargetKey(string targetFileName)
+        {
+            string languageCode = Path.GetFileNameWithoutExtension(targetFileName)?[..2].ToLower() ?? throw new InvalidOperationException();
+            string countryCode = Path.GetFileNameWithoutExtension(targetFileName)?[3..].ToUpper() ?? throw new InvalidOperationException();
+
+            return $"{languageCode}-{countryCode}";
+        }
     }
 }
