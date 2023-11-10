@@ -135,9 +135,11 @@ namespace DeeplTranslator
 
             //clean up the target file. Remove all keys in the target file which is not in the source file (great for removing/updating a key)
             _jsonUtility.RemoveMissingKeys(target, source);
+            
+            var newTarget = _jsonUtility.UpdateTargetTranslationsOrder(source.ToString(), target.ToString(), targetFileName);
 
             //write json
-            string cleanTarget = startString + _jsonUtility.FormatTypeScript(target.ToString() ?? string.Empty);
+            string cleanTarget = startString + _jsonUtility.FormatTypeScript(newTarget);
             await File.WriteAllTextAsync(Path.Combine(path, targetFileName), cleanTarget);
             //write csv
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
@@ -175,8 +177,6 @@ namespace DeeplTranslator
                 logMessage += " without glossary";
             }
             await Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
-            //await Logger.LogMessage($"{logMessage}");
-            //await Logger.LogMessage($"{targetLanguage}: {translatedText}");
             return translatedText.ToString();
         }
 
