@@ -36,7 +36,7 @@ namespace DeeplTranslator
 
             MatchCollection matches = Regex.Matches(translation, pattern);
             int index = 0;
-            foreach (object? match in matches)
+            foreach (object? unused in matches)
             {
                 if (index < translationExceptions.Count)
                 {
@@ -176,8 +176,8 @@ namespace DeeplTranslator
         
         private string FormatTargetKey(string targetFileName)
         {
-            string languageCode = Path.GetFileNameWithoutExtension(targetFileName)?[..2].ToLower() ?? throw new InvalidOperationException();
-            string countryCode = Path.GetFileNameWithoutExtension(targetFileName)?[3..].ToUpper() ?? throw new InvalidOperationException();
+            string languageCode = Path.GetFileNameWithoutExtension(targetFileName)[..2].ToLower() ?? throw new InvalidOperationException();
+            string countryCode = Path.GetFileNameWithoutExtension(targetFileName)[3..].ToUpper() ?? throw new InvalidOperationException();
 
             return $"{languageCode}-{countryCode}";
         }

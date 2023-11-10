@@ -5,15 +5,15 @@ namespace DeeplTranslator
 {
     public class GlossaryManager
     {
-        private readonly DeepL.Translator Translator;
+        private readonly Translator _translator;
         public GlossaryManager(string authKey)
         {
-            Translator = new DeepL.Translator(authKey);
+            _translator = new Translator(authKey);
         }
         
         public async Task<string> CheckUsage()
         {
-            Usage usage = await Translator.GetUsageAsync();
+            Usage usage = await _translator.GetUsageAsync();
             System.Diagnostics.Debug.WriteLine("Deepl:");
             if (usage.AnyLimitReached)
             {
@@ -27,7 +27,7 @@ namespace DeeplTranslator
             string returnString = "";
             try
             {
-                var glossaries = await Translator.ListGlossariesAsync();
+                var glossaries = await _translator.ListGlossariesAsync();
 
                 System.Diagnostics.Debug.WriteLine("Current glossaries...");
                 foreach (GlossaryInfo glossaryInfo in glossaries)
@@ -49,13 +49,13 @@ namespace DeeplTranslator
         }
         public async Task<bool> CheckForExistingGlossary(string glossaryName)
         {
-            var glossaries = await Translator.ListGlossariesAsync();
+            var glossaries = await _translator.ListGlossariesAsync();
             return glossaries.Any(g => String.Equals(g.Name, glossaryName, StringComparison.CurrentCultureIgnoreCase));
 
         }
         public async Task<GlossaryInfo?> GetGlossaryByName(string glossaryName)
         {
-            GlossaryInfo?[] glossaries = await Translator.ListGlossariesAsync();
+            GlossaryInfo?[] glossaries = await _translator.ListGlossariesAsync();
 
             return glossaries.FirstOrDefault(g => String.Equals(g!.Name, glossaryName, StringComparison.CurrentCultureIgnoreCase));
 
@@ -66,7 +66,7 @@ namespace DeeplTranslator
             string returnString;
             try
             {
-                GlossaryInfo unused = await Translator.CreateGlossaryAsync(
+                GlossaryInfo unused = await _translator.CreateGlossaryAsync(
                     glossaryName, sourceLanguage, targetLanguage,
                     new GlossaryEntries(dictionary));
                 returnString = $"Creating Glossary at Deepl{sourceLanguage}-{targetLanguage}";
@@ -82,10 +82,10 @@ namespace DeeplTranslator
         {
             try
             {
-                var glossaries = await Translator.ListGlossariesAsync();
+                var glossaries = await _translator.ListGlossariesAsync();
                 foreach (var glossaryInfo in glossaries)
                 {
-                    await Translator.DeleteGlossaryAsync(glossaryInfo.GlossaryId);
+                    await _translator.DeleteGlossaryAsync(glossaryInfo.GlossaryId);
                 }
 
                 return "Deleting existing glossaries";
