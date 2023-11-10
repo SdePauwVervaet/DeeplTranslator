@@ -4,21 +4,21 @@ using Newtonsoft.Json.Linq;
 
 namespace DeeplTranslator
 {
-    public class Translator
+    public class TranslatePerLine
     {
-        private readonly DeepL.Translator _translator;
+        private readonly Translator _translator;
         private readonly GlossaryManager _glossaryManager;
         private readonly JsonUtility _jsonUtility;
         private readonly string[] _exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
-        public Translator(string authKey)
+        public TranslatePerLine(string authKey)
         {
-            this._translator = new DeepL.Translator(authKey);
+            this._translator = new Translator(authKey);
             this._glossaryManager = new GlossaryManager(authKey);
             this._jsonUtility = new JsonUtility();
         }
 
         // Update translation alerts
-        public async Task<string> UpdateTranslation(string sourceLanguage, string filepath)
+        public async Task UpdateTranslationInFile(string sourceLanguage, string filepath)
         {
             // Read the JSON content from the file
             string jsonSource = await File.ReadAllTextAsync(filepath);
@@ -28,48 +28,43 @@ namespace DeeplTranslator
 
             JToken compareTo = source.SelectToken(sourceLanguage);
 
-            string returnString = $"Started translating {filepath} to {sourceLanguage}";
+            await Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
 
             foreach (JToken? sourceLanguageToken in source)
             {
                 string currentLanguage = sourceLanguageToken.Path;
 
-                if (currentLanguage != sourceLanguage)
+                if (currentLanguage == sourceLanguage) continue;
+                
+                JToken compare = source.SelectToken(currentLanguage);
+                JToken output = target.SelectToken(currentLanguage);
+
+                foreach (JProperty sourceProperty in compareTo.Children<JProperty>())
                 {
-                    JToken compare = source.SelectToken(currentLanguage);
-                    JToken output = target.SelectToken(currentLanguage);
-
-                    foreach (JProperty sourceProperty in compareTo.Children<JProperty>())
+                    // Don't translate engine faults or exceptions
+                    if (_exceptions.Any(exception => sourceProperty.Name.Contains(exception)))
                     {
-                        // Don't translate engine faults or exceptions
-                        if (_exceptions.Any(exception => sourceProperty.Name.Contains(exception)))
-                        {
-                            Console.WriteLine($@"Exception found. Not translating {sourceProperty.Name}");
-                            continue;
-                        }
-
-                        bool translationFound = compare.Children<JProperty>().Any(targetProperty =>
-                            JToken.DeepEquals(sourceProperty.Name, targetProperty.Name));
-
-                        if (!translationFound)
-                        {
-                            string translation = await Translate(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage,
-                                currentLanguage);
-                            output[sourceProperty.Name] = translation;
-                        }
+                        Console.WriteLine($@"Exception found. Not translating {sourceProperty.Name}");
+                        continue;
                     }
+
+                    bool translationFound = compare.Children<JProperty>().Any(targetProperty =>
+                        JToken.DeepEquals(sourceProperty.Name, targetProperty.Name));
+
+                    if (translationFound) continue;
+                    
+                    string translation = await HandleTranslationRequest(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage, currentLanguage);
+                    output[sourceProperty.Name] = translation;
                 }
             }
-
             // Update the file with the translated JSON
             await File.WriteAllTextAsync(filepath, target.ToString());
-
-            return returnString + target;
         }
+        
         // Update connect language files
-        public async Task<string> UpdateLanguage(string sourceFilename, string targetFileName, string path)
+        public async Task UpdateSourceToTargetLanguage(string sourceFilename, string targetFileName, string path)
         {
-            string sourceLanguage = "EN";
+            const string sourceLanguage = "EN";
             await Logger.LogMessage($"Source Path: {path}\\{sourceFilename}");
             await Logger.LogMessage($"Target Path: {path}\\{targetFileName}");
 
@@ -84,7 +79,6 @@ namespace DeeplTranslator
             JObject target = JObject.Parse(jsonTarget);
 
             string csvString = "";
-            string returnString = "";
             DateTime dateAndTime = DateTime.Now;
 
             var translationExceptions = new Dictionary<string, List<string>>();
@@ -101,12 +95,11 @@ namespace DeeplTranslator
                     var examples = _jsonUtility.ExtractExceptions(tokenValue);
                     translationExceptions[pathToToken] = examples;
                 }
-
                 string logString;
 
                 if (target.SelectToken(pathToToken) == null)
                 {
-                    string translation = await Translate(tokenValue, sourceLanguage, targetLanguage);
+                    string translation = await HandleTranslationRequest(tokenValue, sourceLanguage, targetLanguage);
 
                     // Check if there are any translation exceptions in the bucket.
                     if (translationExceptions.TryGetValue(pathToToken, out var exceptions))
@@ -140,11 +133,9 @@ namespace DeeplTranslator
             await File.WriteAllTextAsync(Path.Combine(path, targetFileName), cleanTarget);
             //write csv
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
-            returnString += cleanTarget;
             await Logger.LogMessage("Translation finished!");
-            return returnString;
         }
-        private async Task<string> Translate(string translation, string sourceLanguage, string targetLanguage)
+        private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
             DateTime translationStartTime = DateTime.Now;
             string glossaryName = $"{sourceLanguage}-{targetLanguage}";

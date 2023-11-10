@@ -2,7 +2,7 @@
 {
     public static class Logger
     {
-        private static TextBox _textBox;
+        private static TextBox _textBox = null!;
         
         public static void InitializeLogger(TextBox textBox)
         {
@@ -13,10 +13,23 @@
         {
             await Task.Run(() =>
             {
-                _textBox.Text += $"{message} \r\n";
+                _textBox.AppendText($"{message} \r\n");
                 _textBox.Select(_textBox.Text.Length - 1, 0);
                 _textBox.ScrollToCaret();
                 _textBox.Update();
+            });
+        }
+        public static async Task LogMessage(string[] messages)
+        {
+            await Task.Run(() =>
+            {
+                foreach (var message in messages)
+                {
+                    _textBox.AppendText($"{message} \r\n");
+                    _textBox.Select(_textBox.Text.Length - 1, 0);
+                    _textBox.ScrollToCaret();
+                    _textBox.Update();
+                }
             });
         }
     }
