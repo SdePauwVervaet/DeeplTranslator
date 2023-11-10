@@ -3,7 +3,7 @@
     public class TranslatorService
     {
         private const string DeeplAuthKey = "059d0c16-9fed-8d68-544b-2b9d0413c4b3:fx";
-        private readonly TranslatePerList _translatePerLine = new TranslatePerList(DeeplAuthKey);
+        private readonly TranslatePerBatch _translatePerLine = new TranslatePerBatch(DeeplAuthKey);
         private readonly GlossaryManager _glossaryManager = new GlossaryManager(DeeplAuthKey);
         public readonly ExcelParser ExcelParser = new ExcelParser();
 

@@ -4,13 +4,15 @@ using Newtonsoft.Json.Linq;
 
 namespace DeeplTranslator
 {
-    public class TranslatePerList
+    public class TranslatePerBatch
     {
         private readonly Translator _translator;
         private readonly GlossaryManager _glossaryManager;
         private readonly JsonUtility _jsonUtility;
         private readonly string[] _exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
-        public TranslatePerList(string authKey)
+        private const int BatchSize = 100;
+
+        public TranslatePerBatch(string authKey)
         {
             this._translator = new Translator(authKey);
             this._glossaryManager = new GlossaryManager(authKey);
@@ -83,8 +85,7 @@ namespace DeeplTranslator
             DateTime dateAndTime = DateTime.Now;
 
             var translationExceptions = new Dictionary<string, List<string>>();
-            const int batchSize = 100;
-            var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(batchSize);
+            var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(BatchSize);
             foreach (var tokenBatch in tokenBatches)
             {
                 var translationTasks = tokenBatch.Select(async token =>
