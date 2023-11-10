@@ -1,4 +1,4 @@
-﻿namespace ExcelParseToDeepl
+﻿namespace DeeplTranslator
 {
     partial class Form1
     {

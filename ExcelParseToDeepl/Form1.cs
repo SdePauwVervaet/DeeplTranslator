@@ -1,12 +1,11 @@
-using DeeplTranslator;
-
-namespace ExcelParseToDeepl
+namespace DeeplTranslator
 {
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
+            Logger.InitializeLogger(textBox3);
         }
 
         private void textBox1_DragDrop(object sender, DragEventArgs e)
@@ -44,20 +43,10 @@ namespace ExcelParseToDeepl
 
                 if (extn == ".xlsx")
                 {
-                    Parser parser = new Parser();
-                    parser.ParseExcel(file.DirectoryName, file.Name);
-                    parser.GenerateDictionaries((message) =>
-                    {
-                        textBox3.Text = message;
-                        textBox3.Update();
-                    });
-                    parser.UpdateDeeplGlossary((message) =>
-                    {
-                        textBox3.Text += $"{message} \r\n";
-                        textBox3.Update();
-                    });
-
-
+                    var translatorService = new TranslatorService();
+                    translatorService.ExcelParser.ParseExcel(file.DirectoryName, file.Name);
+                    translatorService.ExcelParser.GenerateDictionaries();
+                    translatorService.UpdateDeeplGlossary();
                 }
                 else
                 {
@@ -124,21 +113,14 @@ namespace ExcelParseToDeepl
         {
             List<string> selectedFiles = new List<string>();
             List<string> files = Directory.GetFiles(textBox2.Text, "*.*", SearchOption.AllDirectories)
-                    .Where(file => new string[] { ".json" }
+                    .Where(file => new[] { ".json" }
                     .Contains(Path.GetExtension(file)))
                     .ToList();
             //System.Windows.Forms.MessageBox.Show("Files found: " + files.Count, "Message");
             selectedFiles = files;
 
-            Parser parser = new Parser();
-            await parser.TranslateAlertFiles(selectedFiles, (message) =>
-            {
-                textBox3.Text += $"{message} \r\n";
-                textBox3.Select(textBox3.Text.Length - 1, 0);
-                textBox3.ScrollToCaret();
-                textBox3.Update();
-                return Task.CompletedTask;
-            });
+            var translatorService = new TranslatorService();
+            await translatorService.TranslateAlertFiles(selectedFiles);
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -159,15 +141,8 @@ namespace ExcelParseToDeepl
                 files.RemoveAll(u => u.Contains(exc));
             }
 
-            Parser parser = new Parser();
-            await parser.TranslateLanguageFiles(files, (message) =>
-            {
-                textBox3.Text += $"{message} \r\n";
-                textBox3.Select(textBox3.Text.Length - 1, 0);
-                textBox3.ScrollToCaret();
-                textBox3.Update();
-                return Task.CompletedTask;
-            });
+            var translatorService = new TranslatorService();
+            await translatorService.TranslateLanguageFiles(files);
         }
 
     }

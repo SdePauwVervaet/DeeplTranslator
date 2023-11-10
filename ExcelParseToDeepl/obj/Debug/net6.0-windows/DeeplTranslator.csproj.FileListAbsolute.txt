@@ -52,7 +52,6 @@ C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Po
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\Polly.Extensions.Http.dll
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\bin\Debug\net6.0-windows\SpreadsheetLight.dll
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.AssemblyReference.cache
-C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\ExcelParseToDeepl.Form1.resources
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.GenerateResource.cache
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.GeneratedMSBuildEditorConfig.editorconfig
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfoInputs.cache
@@ -64,3 +63,4 @@ C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\re
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.pdb
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.genruntimeconfig.cache
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\ref\DeeplTranslator.dll
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.Form1.resources

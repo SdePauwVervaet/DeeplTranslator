@@ -2,8 +2,6 @@
 
 ///ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-using ExcelParseToDeepl;
-
 namespace DeeplTranslator
 {
     internal static class Program
