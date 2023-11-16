@@ -35,21 +35,21 @@
         public async void UpdateDeeplGlossary()
         {
             //get current usage and prompt user
-            await Logger.LogMessage(await _glossaryManager.CheckUsage() + Environment.NewLine);
+            Logger.LogMessage(await _glossaryManager.CheckUsage() + Environment.NewLine);
 
 
             //delete all existing glossaries
-            await Logger.LogMessage(await _glossaryManager.DeleteGlossaries() + Environment.NewLine);
+            Logger.LogMessage(await _glossaryManager.DeleteGlossaries() + Environment.NewLine);
 
             //create glossaries
             foreach (Glossary glossary in ExcelParser.TranslationList)
             {
-                await Logger.LogMessage(await _glossaryManager.CreateGlossaryFromDictionary(glossary.SourceLanguage, glossary.TargetLanguage, glossary.Translations));
+                Logger.LogMessage(await _glossaryManager.CreateGlossaryFromDictionary(glossary.SourceLanguage, glossary.TargetLanguage, glossary.Translations));
             }
 
             //Show current glossaries
-            await Logger.LogMessage(await _glossaryManager.CheckForGlossaries() + Environment.NewLine);
-            await Logger.LogMessage($"~~~Done with glossaries~~~" + Environment.NewLine);
+            Logger.LogMessage(await _glossaryManager.CheckForGlossaries() + Environment.NewLine);
+            Logger.LogMessage($"~~~Done with glossaries~~~" + Environment.NewLine);
         }
     }
 }

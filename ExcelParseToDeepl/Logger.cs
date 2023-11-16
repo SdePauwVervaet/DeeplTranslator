@@ -9,15 +9,30 @@
             _textBox = textBox ?? throw new ArgumentNullException($"Logger cannot be initialized because {nameof(textBox)} is null");
         }
 
-        public static async Task LogMessage(string message)
+        // public static async Task LogMessage(string message)
+        // {
+        //     await Task.Run(() =>
+        //     {
+        //         _textBox.AppendText($"{message} \r\n");
+        //         _textBox.Select(_textBox.Text.Length - 1, 0);
+        //         _textBox.ScrollToCaret();
+        //         _textBox.Update();
+        //     });
+        // }
+        
+        public static void LogMessage(string message)
         {
-            await Task.Run(() =>
+            if (_textBox.InvokeRequired)
+            {
+                _textBox.Invoke(new Action(() => LogMessage(message)));
+            }
+            else
             {
                 _textBox.AppendText($"{message} \r\n");
                 _textBox.Select(_textBox.Text.Length - 1, 0);
                 _textBox.ScrollToCaret();
                 _textBox.Update();
-            });
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace DeeplTranslator
 
             JToken compareTo = source.SelectToken(sourceLanguage);
 
-            await Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
+            Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
 
             foreach (JToken? sourceLanguageToken in source)
             {
@@ -55,8 +55,7 @@ namespace DeeplTranslator
 
                     if (translationFound) continue;
                     
-                    string translation = await HandleTranslationRequest(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage,
-                        currentLanguage);
+                    string translation = await HandleTranslationRequest(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage, currentLanguage);
                     output[sourceProperty.Name] = translation;
                 }
             }
@@ -68,8 +67,8 @@ namespace DeeplTranslator
         public async Task UpdateSourceToTargetLanguage(string sourceFilename, string targetFileName, string path)
         {
             const string sourceLanguage = "EN";
-            await Logger.LogMessage($"Source Path: {path}\\{sourceFilename}");
-            await Logger.LogMessage($"Target Path: {path}\\{targetFileName}");
+            Logger.LogMessage($"Source Path: {path}\\{sourceFilename}");
+            Logger.LogMessage($"Target Path: {path}\\{targetFileName}");
 
             // Determine the target language based on the target file name
             string targetLanguage = targetFileName.Substring(0, 2).ToUpper();
@@ -145,7 +144,7 @@ namespace DeeplTranslator
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
             
             TimeSpan translationTime = DateTime.Now - dateAndTime;
-            await Logger.LogMessage($"Translation finished! Time: {translationTime:mm\\:ss\\:ff}");
+            Logger.LogMessage($"Translation finished! Time: {translationTime:mm\\:ss\\:ff}");
         }
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
@@ -176,7 +175,7 @@ namespace DeeplTranslator
                 );
                 logMessage += " without glossary";
             }
-            await Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
+            Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
             return translatedText.ToString();
         }
 

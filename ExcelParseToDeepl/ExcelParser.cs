@@ -30,7 +30,7 @@ namespace DeeplTranslator
 
         public async void GenerateDictionaries()
         {
-            await Logger.LogMessage("Generating!");
+            Logger.LogMessage("Generating!");
 
             for (int c = 1; c < _stats.NumberOfColumns; c++)
             {
@@ -39,7 +39,7 @@ namespace DeeplTranslator
                 string sourceKey = _wb.GetCellValueAsString(1, 1);
                 string targetKey = _wb.GetCellValueAsString(1, c + 1);
                 var glossary = new Glossary(sourceKey, targetKey);
-                await Logger.LogMessage($"Generating glossary {sourceKey}-{targetKey}" + Environment.NewLine);
+                Logger.LogMessage($"Generating glossary {sourceKey}-{targetKey}" + Environment.NewLine);
 
                 for (int i = 2; i <= _stats.NumberOfRows; i++)
                 {
@@ -60,9 +60,9 @@ namespace DeeplTranslator
                     {
                         duplicateEntries.Add($"{i}_{translation.SourceText}", translation.TargetText);
                     }
-                    await Logger.LogMessage($"Added {translation.SourceText}, {translation.TargetText}, {translation.SourceText} to dictionary");
+                    Logger.LogMessage($"Added {translation.SourceText}, {translation.TargetText}, {translation.SourceText} to dictionary");
                 }
-                await Logger.LogMessage("Writing glossary and glossary DUPLICATES files..." + Environment.NewLine);
+                Logger.LogMessage("Writing glossary and glossary DUPLICATES files..." + Environment.NewLine);
                 
                 //create glossary file
                 WriteCsv(_filePath, sourceKey, targetKey, glossary.Translations);

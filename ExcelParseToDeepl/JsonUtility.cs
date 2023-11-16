@@ -42,7 +42,7 @@ namespace DeeplTranslator
                 {
                     string exception = translationExceptions[index];
                     translation = Regex.Replace(translation, matches[index].Value, $"{exception}");
-                    await Logger.LogMessage($"Replaced key: {matches[index].Value} -> {exception}");
+                    Logger.LogMessage($"Replaced key: {matches[index].Value} -> {exception}");
                     index++;
                 }
                 else

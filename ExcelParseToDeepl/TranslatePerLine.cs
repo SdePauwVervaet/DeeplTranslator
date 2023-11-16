@@ -28,7 +28,7 @@ namespace DeeplTranslator
 
             JToken compareTo = source.SelectToken(sourceLanguage);
 
-            await Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
+            Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
 
             foreach (JToken? sourceLanguageToken in source)
             {
@@ -65,8 +65,8 @@ namespace DeeplTranslator
         public async Task UpdateSourceToTargetLanguage(string sourceFilename, string targetFileName, string path)
         {
             const string sourceLanguage = "EN";
-            await Logger.LogMessage($"Source Path: {path}\\{sourceFilename}");
-            await Logger.LogMessage($"Target Path: {path}\\{targetFileName}");
+            Logger.LogMessage($"Source Path: {path}\\{sourceFilename}");
+            Logger.LogMessage($"Target Path: {path}\\{targetFileName}");
 
             // Determine the target language based on the target file name
             string targetLanguage = targetFileName.Substring(0, 2).ToUpper();
@@ -133,7 +133,7 @@ namespace DeeplTranslator
             await File.WriteAllTextAsync(Path.Combine(path, targetFileName), cleanTarget);
             //write csv
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
-            await Logger.LogMessage("Translation finished!");
+            Logger.LogMessage("Translation finished!");
         }
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
@@ -166,9 +166,9 @@ namespace DeeplTranslator
                 logMessage += " without glossary";
             }
             TimeSpan translationTime = DateTime.Now - translationStartTime;
-            await Logger.LogMessage($"Translating: {glossaryName} Translation Time: {translationTime}");
-            await Logger.LogMessage($"{logMessage}");
-            await Logger.LogMessage($"{targetLanguage}: {translatedText}");
+            Logger.LogMessage($"Translating: {glossaryName} Translation Time: {translationTime}");
+            Logger.LogMessage($"{logMessage}");
+            Logger.LogMessage($"{targetLanguage}: {translatedText}");
             return translatedText.ToString();
         }
 
