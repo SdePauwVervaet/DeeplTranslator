@@ -176,59 +176,56 @@ namespace DeeplTranslator
         /// <returns></returns>
         public string UpdateTargetTranslationsOrder(string sourceJson, string targetJson, string targetFileName)
         {
-        JObject sourceObject = JObject.Parse(sourceJson);
-        JObject targetObject = JObject.Parse(targetJson);
+            JObject sourceObject = JObject.Parse(sourceJson);
+            JObject targetObject = JObject.Parse(targetJson);
 
-        // Extract the translations section from both source and target
-        var sourceTranslations = (JObject)sourceObject["translations"];
-        var targetTranslations = (JObject)targetObject["translations"];
+            var sourceTranslations = (JObject)sourceObject["translations"];
+            var targetTranslations = (JObject)targetObject["translations"];
 
-        // Create a dictionary to store the order of keys from the source file
-        var sourceOrder = new Dictionary<string, JToken>();
+            var sourceOrder = sourceTranslations.Properties()
+                .ToDictionary(property => property.Name, property => property.Value);
 
-        // Iterate through the source translations and store the order
-        foreach (var pair in sourceTranslations)
-        {
-            sourceOrder[pair.Key] = pair.Value;
+            var newTargetTranslations = new JObject(
+                sourceOrder.Keys
+                    .Where(key => targetTranslations.ContainsKey(key))
+                    .Select(key => new JProperty(key, SortProperties(targetTranslations[key], sourceOrder[key])))
+            );
+
+            targetObject["translations"] = newTargetTranslations;
+
+            targetObject.Property("key")?.Remove();
+            targetObject.AddFirst(new JProperty("key", FormatTargetKey(targetFileName)));
+
+            return targetObject.ToString(Formatting.Indented);
         }
-
-        // Create a new translations object in the target file with the order from the source
-        var newTargetTranslations = new JObject();
-
-        // Iterate through the source order and add properties to the target in the same order
-        foreach (string key in sourceOrder.Keys.Where(key => targetTranslations.ContainsKey(key)))
+        
+        /// <summary>
+        /// Helper method of UpdateTargetTranslationsOrder(string sourceJson, string targetJson, string targetFileName);
+        /// </summary>
+        /// <param name="targetToken"></param>
+        /// <param name="sourceToken"></param>
+        /// <returns></returns>
+        private JToken SortProperties(JToken targetToken, JToken sourceToken)
         {
-            if (sourceOrder[key].Type == JTokenType.Object)
+            if (sourceToken.Type == JTokenType.Object && targetToken.Type == JTokenType.Object)
             {
-                // Handle nested properties
-                var nestedSource = (JObject)sourceOrder[key];
-                var nestedTarget = (JObject)targetTranslations[key];
-
-                var nestedOrder = new JObject();
-
-                foreach (var nestedKey in nestedSource.Properties().Select(p => p.Name))
-                {
-                    if (nestedTarget.TryGetValue(nestedKey, out JToken? value))
-                    {
-                        nestedOrder[nestedKey] = value;
-                    }
-                }
-
-                newTargetTranslations[key] = nestedOrder;
+                var sortedObject = new JObject(
+                    ((JObject)sourceToken).Properties()
+                    .Select(sourceProperty => new JProperty(
+                        sourceProperty.Name, 
+                        SortProperties(((JObject)targetToken).GetValue(sourceProperty.Name), sourceProperty.Value))
+                    )
+                );
+                return sortedObject;
+            }
+            else if (targetToken.Type == JTokenType.Array)
+            {
+                return new JArray(targetToken.Select((t, i) => SortProperties(t, sourceToken[i])));
             }
             else
             {
-                newTargetTranslations[key] = targetTranslations[key];
+                return targetToken;
             }
-        }
-
-        targetObject["translations"] = newTargetTranslations;
-        
-        JProperty keyProperty = targetObject.Property("key");
-        keyProperty.Remove();
-        targetObject.AddFirst(new JProperty("key", FormatTargetKey(targetFileName)));
-
-        return targetObject.ToString(Formatting.Indented);
         }
         
         /// <summary>
@@ -362,33 +359,24 @@ namespace DeeplTranslator
         /// <returns></returns>
         public JObject SortLanguages(JObject json)
         {
-            JObject sortedJson = new JObject();
-
-            // Get the English part
-            JToken englishPart = json["en"];
-            if (englishPart == null)
+            if (!json.TryGetValue("en", out var englishPart))
             {
-                // English part not found, return the original JSON
                 return json;
             }
 
-            // Add English part to the sorted JSON
-            sortedJson["en"] = englishPart;
+            var sortedJson = new JObject { ["en"] = englishPart };
 
-            // Get the list of language codes excluding English
-            IEnumerable<string> languageCodes = json.Properties().Select(p => p.Name).Where(code => code != "en");
+            var languageCodes = json.Properties().Select(p => p.Name).Where(code => code != "en");
 
-            // Sort the language codes based on the English part's property order
-            List<string> sortedLanguageCodes = languageCodes.OrderBy(code =>
+            var sortedLanguageCodes = languageCodes.OrderBy(code =>
             {
-                JToken property = englishPart[code];
+                var property = englishPart[code];
                 return property != null ? Array.IndexOf(englishPart.ToArray(), property) : int.MaxValue;
             }).ToList();
 
-            // Add the sorted languages to the sorted JSON
             foreach (var languageCode in sortedLanguageCodes)
             {
-                JToken languagePart = json[languageCode];
+                var languagePart = json[languageCode];
                 if (languagePart != null)
                 {
                     sortedJson[languageCode] = SortLanguagePart(languagePart, englishPart);
@@ -407,19 +395,18 @@ namespace DeeplTranslator
         {
             if (languagePart is JObject languageObject)
             {
-                JObject sortedLanguageObject = new JObject();
+                var sortedLanguageObject = new JObject();
 
-                // Sort properties based on the English part's property order
-                List<JProperty> sortedProperties = englishPart
+                var sortedProperties = englishPart
                     .Cast<JProperty>()
                     .OrderBy(p => Array.IndexOf(englishPart.ToArray(), languageObject.Property(p.Name)))
                     .ToList();
 
                 foreach (var property in sortedProperties)
                 {
-                    string propertyName = property.Name;
+                    var propertyName = property.Name;
+                    var propertyValue = languageObject[propertyName];
 
-                    JToken propertyValue = languageObject[propertyName];
                     if (propertyValue != null)
                     {
                         sortedLanguageObject[propertyName] = SortLanguagePart(propertyValue, property.Value);
@@ -430,15 +417,10 @@ namespace DeeplTranslator
             }
             else if (languagePart is JArray languageArray)
             {
-                // Recursively sort array elements
-                JArray sortedLanguageArray = new JArray(languageArray.Select(item => SortLanguagePart(item, englishPart)));
-                return sortedLanguageArray;
+                return new JArray(languageArray.Select(item => SortLanguagePart(item, englishPart)));
             }
-            else
-            {
-                // For other types, return the original value
-                return languagePart;
-            }
+
+            return languagePart;
         }
         
         /// <summary>

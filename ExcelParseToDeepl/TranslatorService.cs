@@ -15,7 +15,7 @@
                 string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
              
                 //await _translatePerLine.UpdateTranslationInFile(path, fileName);
-                _line.UpdateTranslationInSameFile(path, fileName);
+                await _line.UpdateTranslationInSameFile(path, fileName);
                 
                 System.Diagnostics.Debug.WriteLine(fileName);
             }

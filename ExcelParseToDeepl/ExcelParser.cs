@@ -28,7 +28,7 @@ namespace DeeplTranslator
             return ms;
         }
 
-        public async void GenerateDictionaries()
+        public void GenerateDictionaries()
         {
             Logger.LogMessage("Generating!");
 

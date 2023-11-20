@@ -32,7 +32,7 @@ namespace DeeplTranslator
         {
             if (textBox1.Text.Length == 0)
             {
-                textBox1.Text = "Select a file by dropping it here...";
+                textBox1.Text = @"Select a file by dropping it here...";
                 textBox1.Update();
             }
             else
@@ -44,13 +44,13 @@ namespace DeeplTranslator
                 if (extn == ".xlsx")
                 {
                     var translatorService = new TranslatorService();
-                    translatorService.ExcelParser.ParseExcel(file.DirectoryName, file.Name);
+                    translatorService.ExcelParser.ParseExcel(file.DirectoryName!, file.Name);
                     translatorService.ExcelParser.GenerateDictionaries();
                     translatorService.UpdateDeeplGlossary();
                 }
                 else
                 {
-                    textBox1.Text = "I'll only 'eat' .xlsx files. Select a file by dropping it here...";
+                    textBox1.Text = @"I'll only 'eat' .xlsx files. Select a file by dropping it here...";
                     textBox1.Update();
                 }
             }
@@ -73,14 +73,11 @@ namespace DeeplTranslator
         }
         private void Open_Click_2(object sender, EventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                DialogResult result = dialog.ShowDialog();
+            using var dialog = new FolderBrowserDialog();
+            DialogResult result = dialog.ShowDialog();
 
-                textBox2.AppendText(dialog.SelectedPath);
-            }
+            textBox2.AppendText(dialog.SelectedPath);
         }
-
 
         private void textBox2_DragDrop(object sender, DragEventArgs e)
         {
@@ -107,20 +104,16 @@ namespace DeeplTranslator
 
         }
 
-
-
         private async void button3_Click(object sender, EventArgs e)
         {
-            List<string> selectedFiles = new List<string>();
-            List<string> files = Directory.GetFiles(textBox2.Text, "*.*", SearchOption.AllDirectories)
+            var files = Directory.GetFiles(textBox2.Text, "*.*", SearchOption.AllDirectories)
                     .Where(file => new[] { ".json" }
                     .Contains(Path.GetExtension(file)))
                     .ToList();
             //System.Windows.Forms.MessageBox.Show("Files found: " + files.Count, "Message");
-            selectedFiles = files;
 
             var translatorService = new TranslatorService();
-            await translatorService.TranslateAlertFiles(selectedFiles);
+            await translatorService.TranslateAlertFiles(files);
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -144,6 +137,5 @@ namespace DeeplTranslator
             var translatorService = new TranslatorService();
             await translatorService.TranslateLanguageFiles(files);
         }
-
     }
 }
