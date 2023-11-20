@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DeeplTranslator
 {
-    public class TranslatePerBatch
+    public class BatchTranslator
     {
         private readonly Translator _translator;
         private readonly GlossaryManager _glossaryManager;
@@ -12,7 +12,7 @@ namespace DeeplTranslator
         private readonly string[] _exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
         private const int BatchSize = 100;
 
-        public TranslatePerBatch(string authKey)
+        public BatchTranslator(string authKey)
         {
             this._translator = new Translator(authKey);
             this._glossaryManager = new GlossaryManager(authKey);
@@ -20,47 +20,76 @@ namespace DeeplTranslator
         }
 
         // Update translation alerts
-        public async Task UpdateTranslationInFile(string sourceLanguage, string filepath)
+        public async Task UpdateTranslationInSameFile(string filePath, string fileName)
         {
-            // Read the JSON content from the file
-            string jsonSource = await File.ReadAllTextAsync(filepath);
+            const string sourceLanguage = "en";
+            Logger.LogMessage($"File Path: {filePath}\\{fileName}");
+            DateTime dateAndTime = DateTime.Now;
+            
+            string jsonSource = await File.ReadAllTextAsync(Path.Combine(filePath, fileName));
 
-            JToken source = JToken.Parse(jsonSource);
-            JToken target = JToken.Parse(jsonSource);
+            JObject fileObject = JObject.Parse(jsonSource);
+            var source = (JObject)fileObject.SelectToken(sourceLanguage);
 
-            JToken compareTo = source.SelectToken(sourceLanguage);
+            var targetLanguages = fileObject.Properties()
+                .Where(prop => prop.Name != sourceLanguage)
+                .Select(prop => prop.Name)
+                .ToList();
 
-            Logger.LogMessage($"Started translating {filepath} to {sourceLanguage}");
-
-            foreach (JToken? sourceLanguageToken in source)
+            foreach (string language in targetLanguages)
             {
-                string currentLanguage = sourceLanguageToken.Path;
-
-                if (currentLanguage == sourceLanguage) continue;
-                
-                JToken compare = source.SelectToken(currentLanguage);
-                JToken output = target.SelectToken(currentLanguage);
-
-                foreach (JProperty sourceProperty in compareTo.Children<JProperty>())
+                if (!fileObject.ContainsKey(language))
                 {
-                    // Don't translate engine faults or exceptions
-                    if (_exceptions.Any(exception => sourceProperty.Name.Contains(exception)))
-                    {
-                        Console.WriteLine($@"Exception found. Not translating {sourceProperty.Name}");
-                        continue;
-                    }
-
-                    bool translationFound = compare.Children<JProperty>().Any(targetProperty =>
-                        JToken.DeepEquals(sourceProperty.Name, targetProperty.Name));
-
-                    if (translationFound) continue;
-                    
-                    string translation = await HandleTranslationRequest(sourceProperty.Value.ToString() ?? throw new InvalidOperationException(), sourceLanguage, currentLanguage);
-                    output[sourceProperty.Name] = translation;
+                    fileObject[language] = new JObject();
                 }
+
+                JObject targetLanguage = (JObject)fileObject[language];
+
+                var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(50);
+                foreach (var tokenBatch in tokenBatches)
+                {
+                    var translationTasks = tokenBatch.Select(async token =>
+                    {
+                        string tokenParent = token.Parent.ToString()!;
+                        string pathToToken = token.Path;
+                        string tokenValue = token.Value<string>();
+                        string tokenKeyValue = _jsonUtility.ExtractTokenKeyValue(tokenParent, token);
+
+                        if (_jsonUtility.IsKeyInTargetLanguage(targetLanguage, tokenKeyValue)) return;
+
+                        // Don't translate engine faults or exceptions
+                        if (_exceptions.Any(exception => tokenKeyValue.Contains(exception)))
+                        {
+                            Console.WriteLine($@"Exception found. Not translating {tokenKeyValue} for {language}");
+                            return;
+                        }
+
+                        // Key doesn't exist in the target language, add it and translate the value
+                        string translatedValue = await HandleTranslationRequest(tokenValue ?? throw new InvalidOperationException(), sourceLanguage, language);
+                        List<string> tokenPath;
+                        try
+                        {
+                            tokenPath = _jsonUtility.ExtractTokenPath(pathToToken, tokenKeyValue);
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Delay(1000);
+                            Console.WriteLine(e);
+                            Logger.LogMessage(e + " TokenPath: " + token.Path);
+                            Logger.LogMessage("Please contact your administrator!");
+                            throw;
+                        }
+                        _jsonUtility.AddToJObjectKey(targetLanguage, tokenPath, translatedValue, tokenKeyValue);
+                    });
+                    await Task.WhenAll(translationTasks);
+                }
+                Logger.LogMessage($"Finished translating for {language}!");
             }
-            // Update the file with the translated JSON
-            await File.WriteAllTextAsync(filepath, target.ToString());
+            
+            JObject sortedJson = _jsonUtility.SortLanguages(fileObject);
+            await File.WriteAllTextAsync(Path.Combine(filePath, fileName), sortedJson.ToString());
+            TimeSpan translationTime = DateTime.Now - dateAndTime;
+            Logger.LogMessage($"Translation finished! Time: {translationTime:mm\\:ss\\:ff}");
         }
         
         // Update connect language files
@@ -73,8 +102,8 @@ namespace DeeplTranslator
             // Determine the target language based on the target file name
             string targetLanguage = targetFileName.Substring(0, 2).ToUpper();
 
-            var (jsonSource, startString) = _jsonUtility.ReadAndCleanJson(Path.Combine(path, sourceFilename), true);
-            var jsonTarget = _jsonUtility.ReadAndCleanJson(Path.Combine(path, targetFileName));
+            (string jsonSource, string startString) = _jsonUtility.ReadAndCleanJson(Path.Combine(path, sourceFilename), true);
+            string jsonTarget = _jsonUtility.ReadAndCleanJson(Path.Combine(path, targetFileName));
 
             // Parse the JSON content into JObject instances
             JObject source = JObject.Parse(jsonSource);
@@ -89,7 +118,7 @@ namespace DeeplTranslator
             {
                 var translationTasks = tokenBatch.Select(async token =>
                 {
-                    var pathToToken = token.Path;
+                    string pathToToken = token.Path;
                     string tokenValue = token.Value<string>();
 
                     if (token.Value<string>().Contains("{{") && token.Value<string>().Contains("}}"))
@@ -109,8 +138,7 @@ namespace DeeplTranslator
                         {
                             translation = await _jsonUtility.ReplaceExceptions(translation, exceptions);
                         }
-
-                        AddToJObject(target, pathToToken.Split('.'), translation);
+                        _jsonUtility.AddToJObject(target, pathToToken.Split('.'), translation);
 
                         logString =
                             $"{dateAndTime};{sourceLanguage};{targetLanguage}; {pathToToken}; {token.Value<string>()}; {target.SelectToken(pathToToken)}";
@@ -132,13 +160,12 @@ namespace DeeplTranslator
                 await Task.WhenAll(translationTasks);
             }
 
-            //clean up the target file. Remove all keys in the target file which is not in the source file (great for removing/updating a key)
             _jsonUtility.RemoveMissingKeys(target, source);
             
-            var newTarget = _jsonUtility.UpdateTargetTranslationsOrder(source.ToString(), target.ToString(), targetFileName);
+            string newTarget = _jsonUtility.UpdateTargetTranslationsOrder(source.ToString()!, target.ToString()!, targetFileName);
 
             //write json
-            string cleanTarget = startString + _jsonUtility.FormatTypeScript(newTarget);
+            string cleanTarget = startString + _jsonUtility.FormatJsonToTypeScript(newTarget);
             await File.WriteAllTextAsync(Path.Combine(path, targetFileName), cleanTarget);
             //write csv
             await File.WriteAllTextAsync(Path.Combine(path, $"{sourceLanguage}-{targetLanguage}.csv"), csvString);
@@ -146,6 +173,7 @@ namespace DeeplTranslator
             TimeSpan translationTime = DateTime.Now - dateAndTime;
             Logger.LogMessage($"Translation finished! Time: {translationTime:mm\\:ss\\:ff}");
         }
+        
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
             string glossaryName = $"{sourceLanguage}-{targetLanguage}";
@@ -177,24 +205,6 @@ namespace DeeplTranslator
             }
             Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
             return translatedText.ToString();
-        }
-
-        private static void AddToJObject(JObject jObject, string[] keys, JToken value)
-        {
-            if (keys.Length == 1)
-            {
-                jObject[keys[0]] = value;
-            }
-            else
-            {
-                string key = keys[0];
-                if (!jObject.ContainsKey(key))
-                {
-                    jObject[key] = new JObject();
-                }
-
-                AddToJObject((jObject[key] as JObject)!, keys.Skip(1).ToArray(), value);
-            }
         }
     }
 }
