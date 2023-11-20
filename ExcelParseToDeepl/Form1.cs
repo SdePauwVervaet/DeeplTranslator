@@ -16,10 +16,7 @@ namespace DeeplTranslator
 
         private void textBox1_DragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Link;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
