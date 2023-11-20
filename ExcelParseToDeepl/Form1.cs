@@ -10,8 +10,7 @@ namespace DeeplTranslator
 
         private void textBox1_DragDrop(object sender, DragEventArgs e)
         {
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files dropped 
-            if (files != null && files.Any())
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
                 textBox1.Text = files.First(); //select the first one  
         }
 
@@ -81,8 +80,7 @@ namespace DeeplTranslator
 
         private void textBox2_DragDrop(object sender, DragEventArgs e)
         {
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files dropped 
-            if (files != null && files.Any())
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
                 textBox1.Text = files.First(); //select the first one  
         }
 
