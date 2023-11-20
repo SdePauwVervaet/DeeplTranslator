@@ -33,7 +33,7 @@ namespace DeeplTranslator
             }
             else
             {
-                FileInfo file = new FileInfo(textBox1.Text);
+                var file = new FileInfo(textBox1.Text);
                 string extn = file.Extension;
                 System.Diagnostics.Debug.WriteLine("File Extension: {0}", extn);
 
