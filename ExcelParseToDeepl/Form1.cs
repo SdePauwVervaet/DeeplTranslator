@@ -62,12 +62,10 @@ namespace DeeplTranslator
 
         private void Open_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            using var dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    textBox1.Text = dialog.FileName;
-                }
+                textBox1.Text = dialog.FileName;
             }
         }
         private void Open_Click_2(object sender, EventArgs e)
@@ -86,10 +84,7 @@ namespace DeeplTranslator
 
         private void textBox2_DragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Link;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -121,7 +116,7 @@ namespace DeeplTranslator
 
         private async void button4_Click(object sender, EventArgs e)
         {
-            List<string> files = Directory.GetFiles(textBox2.Text, "*.*", SearchOption.AllDirectories)
+            var files = Directory.GetFiles(textBox2.Text, "*.*", SearchOption.AllDirectories)
                     .Where(file => new string[] { ".js" }
                     .Contains(Path.GetExtension(file)))
                     .ToList();
