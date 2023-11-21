@@ -64,3 +64,4 @@ C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\De
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.genruntimeconfig.cache
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\ref\DeeplTranslator.dll
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.Form1.resources
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.Properties.Resources.resources

@@ -8,28 +8,6 @@ namespace DeeplTranslator
             Logger.InitializeLogger(textBox3);
         }
 
-        private void TextBoxGlossarySelect_OnTextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TextBoxGlossarySelect_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
-                TextBox_GlossaryFiles.Text = files.First(); //select the first one  
-        }
-
-        private void TextBoxGlossarySelect_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
-        }
-
-        private void TextBoxTranslationFolderSelect_OnTextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
         private void ButtonSelectTranslationFiles_OnClick(object sender, EventArgs e)
         {
             using var dialog = new FolderBrowserDialog();
@@ -41,12 +19,12 @@ namespace DeeplTranslator
         private void ButtonSelectGlossaryFiles_OnClick(object sender, EventArgs e)
         {
             using var dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 TextBox_GlossaryFiles.Text = dialog.FileName;
             }
         }
-        
+
         private void ButtonGenerateGlossaries_OnClick(object sender, EventArgs e)
         {
             if (TextBox_GlossaryFiles.Text.Length == 0)
@@ -81,7 +59,6 @@ namespace DeeplTranslator
                     .Where(file => new[] { ".json" }
                     .Contains(Path.GetExtension(file)))
                     .ToList();
-            //System.Windows.Forms.MessageBox.Show("Files found: " + files.Count, "Message");
 
             var translatorService = new TranslatorService();
             await translatorService.TranslateAlertFiles(files);
@@ -106,12 +83,29 @@ namespace DeeplTranslator
 
         private void MainForm_OnLoad(object sender, EventArgs e)
         {
-            System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
+            //System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
 
-            //Sets window size to half the primary-screens resolution.
-            this.Size = new System.Drawing.Size(Convert.ToInt32(0.5 * workingRectangle.Width), Convert.ToInt32(0.5 * workingRectangle.Height));
+            //Sets window size to half the primary - screens resolution.
+            //this.Size = new System.Drawing.Size(Convert.ToInt32(0.5 * workingRectangle.Width), Convert.ToInt32(0.5 * workingRectangle.Height));
+            Form mainForm = (Form)sender;
+            this.Size = new Size(mainForm.Size.Width, mainForm.Size.Height);
 
-            this.Location = new System.Drawing.Point(10, 10);
+            this.Location = new Point(10, 10);
+        }
+
+        private void TextBoxFileSelect_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(DataFormats.FileDrop) is not string[] files || !files.Any()) return;
+            
+            if (sender is TextBox textbox)
+            {
+                textbox.Text = files.First();
+            }
+        }
+
+        private void TextBoxFileSelect_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
         }
     }
 }
