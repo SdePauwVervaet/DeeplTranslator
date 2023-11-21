@@ -51,44 +51,45 @@ namespace DeeplTranslator
                     TextBox_GlossaryFiles.Update();
                 }
             }
+            TextBox_GlossaryFiles.Text = string.Empty;
         }
 
         private async void ButtonTranslateAlerts_OnClick(object sender, EventArgs e)
         {
-            var files = Directory.GetFiles(TextBox_TranslationFiles.Text, "*.*", SearchOption.AllDirectories)
-                    .Where(file => new[] { ".json" }
-                    .Contains(Path.GetExtension(file)))
-                    .ToList();
+            string baseDirectory = TextBox_TranslationFiles.Text;
+
+            var jsonFiles = Directory.GetFiles(baseDirectory, "*.json", SearchOption.AllDirectories)
+                .ToList();
 
             var translatorService = new TranslatorService();
-            await translatorService.TranslateAlertFiles(files);
+            await translatorService.TranslateAlertFiles(jsonFiles);
+            TextBox_TranslationFiles.Text = string.Empty;
         }
 
         private async void ButtonTranslateLanguages_OnClick(object sender, EventArgs e)
         {
-            var files = Directory.GetFiles(TextBox_TranslationFiles.Text, "*.*", SearchOption.AllDirectories)
-                    .Where(file => new string[] { ".js" }
-                    .Contains(Path.GetExtension(file)))
-                    .ToList();
+            string baseDirectory = TextBox_TranslationFiles.Text;
+
+            var jsFiles = Directory.GetFiles(baseDirectory, "*.js", SearchOption.AllDirectories)
+                .ToList();
 
             string[] exceptions = { "index.js", "i18n.js", "i18n-config.js" };
             foreach (string exc in exceptions)
             {
-                files.RemoveAll(u => u.Contains(exc));
+                jsFiles.RemoveAll(u => u.Contains(exc));
             }
 
             var translatorService = new TranslatorService();
-            await translatorService.TranslateLanguageFiles(files);
+            await translatorService.TranslateLanguageFiles(jsFiles);
+            TextBox_TranslationFiles.Text = string.Empty;
         }
 
         private void MainForm_OnLoad(object sender, EventArgs e)
         {
-            //System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
+            System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
 
-            //Sets window size to half the primary - screens resolution.
-            //this.Size = new System.Drawing.Size(Convert.ToInt32(0.5 * workingRectangle.Width), Convert.ToInt32(0.5 * workingRectangle.Height));
-            Form mainForm = (Form)sender;
-            this.Size = new Size(mainForm.Size.Width, mainForm.Size.Height);
+            // Sets window size to a quarter of the primary - screens resolution.
+            this.Size = new Size(Convert.ToInt32(0.25 * workingRectangle.Width), Convert.ToInt32(0.25 * workingRectangle.Height));
 
             this.Location = new Point(10, 10);
         }
