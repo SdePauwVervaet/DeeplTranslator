@@ -3,7 +3,8 @@
     public class TranslatorService
     {
         private const string DeeplAuthKey = "059d0c16-9fed-8d68-544b-2b9d0413c4b3:fx";
-        private readonly BatchTranslator _line = new BatchTranslator(DeeplAuthKey);
+        private readonly BatchTranslator _batchTranslator = new BatchTranslator(DeeplAuthKey);
+        private readonly TxtConverter _txtConverter = new TxtConverter(DeeplAuthKey);
         private readonly GlossaryManager _glossaryManager = new GlossaryManager(DeeplAuthKey);
         public readonly ExcelParser ExcelParser = new ExcelParser();
 
@@ -15,7 +16,7 @@
                 string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
              
                 //await _translatePerLine.UpdateTranslationInFile(path, fileName);
-                await _line.UpdateTranslationInSameFile(path, fileName);
+                await _batchTranslator.UpdateTranslationInSameFile(path, fileName);
                 
                 System.Diagnostics.Debug.WriteLine(fileName);
             }
@@ -32,7 +33,7 @@
 
                 if (targetFileName.Equals(sourceFileName)) continue;
                 
-                await _line.UpdateSourceToTargetLanguage(sourceFileName, targetFileName, path);
+                await _batchTranslator.UpdateSourceToTargetLanguage(sourceFileName, targetFileName, path);
 
                 System.Diagnostics.Debug.WriteLine(targetFileName);
             }
@@ -56,6 +57,13 @@
             //Show current glossaries
             Logger.LogMessage(await _glossaryManager.CheckForGlossaries() + Environment.NewLine);
             Logger.LogMessage($"~~~Done with glossaries~~~" + Environment.NewLine);
+        }
+
+        public async void ConvertTxtFiles(string file, string resultFilePath)
+        {
+            string fileName = Path.GetFileName(file);
+            string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
+            _txtConverter.ConvertFileToJson(path, fileName, resultFilePath);
         }
     }
 }
