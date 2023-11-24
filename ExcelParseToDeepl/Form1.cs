@@ -2,10 +2,19 @@ namespace DeeplTranslator
 {
     public partial class Form1 : Form
     {
+        private readonly Dictionary<CheckBox, string> _machineTypeCheckBoxes = new Dictionary<CheckBox, string>();
+        private string _currentSelectedMachineTypeAlarmFileName = string.Empty;
+        private readonly TranslatorService _translatorService;
         public Form1()
         {
             InitializeComponent();
+            _translatorService = new TranslatorService();
             Logger.InitializeLogger(TextBox_Logger);
+
+            _machineTypeCheckBoxes.Add(CheckBox_BEX25, "bex10alerttranslations.json");
+            _machineTypeCheckBoxes.Add(CheckBox_QSeries, "qseriesx10alerttranslations.json");
+            _machineTypeCheckBoxes.Add(CheckBox_Trike, "trikealerttranslations.json");
+            _machineTypeCheckBoxes.Add(CheckBox_Quad, "quadalerttranslations.json");
         }
 
         private void ButtonSelectFolder_OnClick(object sender, EventArgs e)
@@ -41,6 +50,39 @@ namespace DeeplTranslator
             }
         }
 
+        private void ButtonSelectFolderAlertFile_OnClick(object sender, EventArgs e)
+        {
+            using var dialog = new FolderBrowserDialog();
+            dialog.Description = @"Select Folder";
+            dialog.ShowNewFolderButton = false;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                TextBox_FileToMergeInto.Text = dialog.SelectedPath;
+            }
+        }
+
+        private void ButtonSelectJsonAlertFile_OnClick(object sender, EventArgs e)
+        {
+            using var dialog = new OpenFileDialog();
+            dialog.Filter = @"Json Files|*.json";
+            dialog.Title = @"Select .json File";
+            dialog.CheckFileExists = true;
+            dialog.CheckPathExists = true;
+            dialog.Multiselect = false;
+
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+
+            if (Path.GetExtension(dialog.FileName).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                TextBox_FileToMergeInto.Text = dialog.FileName;
+            }
+            else
+            {
+                MessageBox.Show(@"Please select a valid .json file.", @"Invalid File Type", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void ButtonSelectFolderNewAlerts_OnClick(object sender, EventArgs e)
         {
             using var dialog = new FolderBrowserDialog();
@@ -53,45 +95,52 @@ namespace DeeplTranslator
             }
         }
 
-        private void ButtonSelectFolderNewAlertFileDest_OnClick(object sender, EventArgs e)
+        private async void Button_OnClickConvertNewAlerts(object sender, EventArgs e)
         {
-            using var dialog = new FolderBrowserDialog();
-            dialog.Description = @"Select Folder";
-            dialog.ShowNewFolderButton = false;
+            string fileFolderPath = TextBox_NewAlerts.Text.Trim();
 
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                TextBox_NewAlertFileDestination.Text = dialog.SelectedPath;
-            }
-        }
-
-        private void Button_OnClickConvertNewAlerts(object sender, EventArgs e)
-        {
-            string fileFolderPath = TextBox_NewAlerts .Text.Trim();
-            string resultFilePath = TextBox_NewAlertFileDestination.Text.Trim();
-
-            if (string.IsNullOrEmpty(fileFolderPath))
+            if (String.IsNullOrEmpty(fileFolderPath))
             {
                 MessageBox.Show(@"Please enter a folder path.", @"Empty or invalid Folder Path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            List<string> txtFiles = Directory.GetFiles(fileFolderPath, "*.txt").ToList();
-
-            var translatorService = new TranslatorService();
-
-            foreach (string file in txtFiles)
+            if (String.IsNullOrWhiteSpace(_currentSelectedMachineTypeAlarmFileName))
             {
-                Logger.LogMessage(Environment.NewLine);
-                translatorService.ConvertTxtFiles(file, resultFilePath);
+                MessageBox.Show(@"No machine type selected, please select a machine type.", @"Unknown machine type", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+
+            Logger.LogMessage(Environment.NewLine);
+            await _translatorService.ConvertTxtFiles(fileFolderPath, _currentSelectedMachineTypeAlarmFileName);
+        }
+
+        private async void MergeJsonFiles_OnClick(object sender, EventArgs e)
+        {
+            string fileFolderPath = TextBox_NewAlerts.Text.Trim();
+            string alertsFolderPath = TextBox_FileToMergeInto.Text.Trim();
+
+            if (String.IsNullOrEmpty(fileFolderPath))
+            {
+                MessageBox.Show(@"Please enter a folder path.", @"Empty or invalid Folder Path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (String.IsNullOrWhiteSpace(_currentSelectedMachineTypeAlarmFileName))
+            {
+                MessageBox.Show(@"No machine type selected, please select a machine type.", @"Unknown machine type", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            await _translatorService.MergeJsonFiles(fileFolderPath, _currentSelectedMachineTypeAlarmFileName, alertsFolderPath);
         }
 
         private void ButtonGenerateGlossaries_OnClick(object sender, EventArgs e)
         {
             string filePath = TextBox_GlossaryFiles.Text.Trim();
 
-            if (string.IsNullOrEmpty(filePath))
+            if (String.IsNullOrEmpty(filePath))
             {
                 MessageBox.Show(@"Please select a .xlsx file!", @"Empty or Invalid file.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -103,10 +152,9 @@ namespace DeeplTranslator
 
             if (extn == ".xlsx")
             {
-                var translatorService = new TranslatorService();
-                translatorService.ExcelParser.ParseExcel(file.DirectoryName!, file.Name);
-                translatorService.ExcelParser.GenerateDictionaries();
-                translatorService.UpdateDeeplGlossary();
+                _translatorService.ExcelParser.ParseExcel(file.DirectoryName!, file.Name);
+                _translatorService.ExcelParser.GenerateDictionaries();
+                _translatorService.UpdateDeeplGlossary();
             }
             else
             {
@@ -126,8 +174,7 @@ namespace DeeplTranslator
 
                 if (jsonFiles.Count > 0)
                 {
-                    var translatorService = new TranslatorService();
-                    await translatorService.TranslateAlertFiles(jsonFiles);
+                    await _translatorService.TranslateAlertFiles(jsonFiles);
                     TextBox_TranslationFiles.Clear();
                 }
                 else
@@ -160,8 +207,7 @@ namespace DeeplTranslator
                         jsFiles.RemoveAll(u => u.Contains(exc));
                     }
 
-                    var translatorService = new TranslatorService();
-                    await translatorService.TranslateLanguageFiles(jsFiles);
+                    await _translatorService.TranslateLanguageFiles(jsFiles);
                     TextBox_TranslationFiles.Clear();
                 }
                 else
@@ -200,6 +246,19 @@ namespace DeeplTranslator
         private void TextBoxFileSelect_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = e.Data!.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
+        }
+
+        private void OnCheckChanged_MachineType(object sender, EventArgs e)
+        {
+            var selectedCheckBox = (CheckBox)sender;
+
+            if (!selectedCheckBox.Checked) return;
+
+            foreach (CheckBox checkBox in _machineTypeCheckBoxes.Keys.Where(checkBox => checkBox != selectedCheckBox))
+            {
+                checkBox.Checked = false;
+            }
+            _currentSelectedMachineTypeAlarmFileName = _machineTypeCheckBoxes[selectedCheckBox];
         }
     }
 }

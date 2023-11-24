@@ -43,11 +43,17 @@
             TabPage_Translate = new TabPage();
             groupBox1 = new GroupBox();
             TabPage_NewAlerts = new TabPage();
+            groupBox2 = new GroupBox();
+            CheckBox_Quad = new CheckBox();
+            CheckBox_Trike = new CheckBox();
+            CheckBox_QSeries = new CheckBox();
+            CheckBox_BEX25 = new CheckBox();
             GroupBox_NewAlertsOptions = new GroupBox();
+            Button_MergeJsonFiles = new Button();
             Button_ConvertTxt = new Button();
-            GroupBox_NewAlertsFileDestination = new GroupBox();
-            Button_NewAlertSelectFileDestination = new Button();
-            TextBox_NewAlertFileDestination = new TextBox();
+            GroupBox_AlarmFileMerge = new GroupBox();
+            Button_MachineAlarmFileSelect = new Button();
+            TextBox_FileToMergeInto = new TextBox();
             groupBox_NewAlerts = new GroupBox();
             Button_SelectNewAlerts = new Button();
             TextBox_NewAlerts = new TextBox();
@@ -57,8 +63,9 @@
             TabPage_Translate.SuspendLayout();
             groupBox1.SuspendLayout();
             TabPage_NewAlerts.SuspendLayout();
+            groupBox2.SuspendLayout();
             GroupBox_NewAlertsOptions.SuspendLayout();
-            GroupBox_NewAlertsFileDestination.SuspendLayout();
+            GroupBox_AlarmFileMerge.SuspendLayout();
             groupBox_NewAlerts.SuspendLayout();
             SuspendLayout();
             // 
@@ -165,18 +172,65 @@
             // TabPage_NewAlerts
             // 
             TabPage_NewAlerts.BackColor = Color.WhiteSmoke;
+            TabPage_NewAlerts.Controls.Add(groupBox2);
             TabPage_NewAlerts.Controls.Add(GroupBox_NewAlertsOptions);
-            TabPage_NewAlerts.Controls.Add(GroupBox_NewAlertsFileDestination);
+            TabPage_NewAlerts.Controls.Add(GroupBox_AlarmFileMerge);
             TabPage_NewAlerts.Controls.Add(groupBox_NewAlerts);
             resources.ApplyResources(TabPage_NewAlerts, "TabPage_NewAlerts");
             TabPage_NewAlerts.Name = "TabPage_NewAlerts";
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(CheckBox_Quad);
+            groupBox2.Controls.Add(CheckBox_Trike);
+            groupBox2.Controls.Add(CheckBox_QSeries);
+            groupBox2.Controls.Add(CheckBox_BEX25);
+            resources.ApplyResources(groupBox2, "groupBox2");
+            groupBox2.Name = "groupBox2";
+            groupBox2.TabStop = false;
+            // 
+            // CheckBox_Quad
+            // 
+            resources.ApplyResources(CheckBox_Quad, "CheckBox_Quad");
+            CheckBox_Quad.Name = "CheckBox_Quad";
+            CheckBox_Quad.UseVisualStyleBackColor = true;
+            CheckBox_Quad.CheckedChanged += OnCheckChanged_MachineType;
+            // 
+            // CheckBox_Trike
+            // 
+            resources.ApplyResources(CheckBox_Trike, "CheckBox_Trike");
+            CheckBox_Trike.Name = "CheckBox_Trike";
+            CheckBox_Trike.UseVisualStyleBackColor = true;
+            CheckBox_Trike.CheckedChanged += OnCheckChanged_MachineType;
+            // 
+            // CheckBox_QSeries
+            // 
+            resources.ApplyResources(CheckBox_QSeries, "CheckBox_QSeries");
+            CheckBox_QSeries.Name = "CheckBox_QSeries";
+            CheckBox_QSeries.UseVisualStyleBackColor = true;
+            CheckBox_QSeries.CheckedChanged += OnCheckChanged_MachineType;
+            // 
+            // CheckBox_BEX25
+            // 
+            resources.ApplyResources(CheckBox_BEX25, "CheckBox_BEX25");
+            CheckBox_BEX25.Name = "CheckBox_BEX25";
+            CheckBox_BEX25.UseVisualStyleBackColor = true;
+            CheckBox_BEX25.CheckedChanged += OnCheckChanged_MachineType;
+            // 
             // GroupBox_NewAlertsOptions
             // 
+            GroupBox_NewAlertsOptions.Controls.Add(Button_MergeJsonFiles);
             GroupBox_NewAlertsOptions.Controls.Add(Button_ConvertTxt);
             resources.ApplyResources(GroupBox_NewAlertsOptions, "GroupBox_NewAlertsOptions");
             GroupBox_NewAlertsOptions.Name = "GroupBox_NewAlertsOptions";
             GroupBox_NewAlertsOptions.TabStop = false;
+            // 
+            // Button_MergeJsonFiles
+            // 
+            resources.ApplyResources(Button_MergeJsonFiles, "Button_MergeJsonFiles");
+            Button_MergeJsonFiles.Name = "Button_MergeJsonFiles";
+            Button_MergeJsonFiles.UseVisualStyleBackColor = true;
+            Button_MergeJsonFiles.Click += MergeJsonFiles_OnClick;
             // 
             // Button_ConvertTxt
             // 
@@ -185,26 +239,26 @@
             Button_ConvertTxt.UseVisualStyleBackColor = true;
             Button_ConvertTxt.Click += Button_OnClickConvertNewAlerts;
             // 
-            // GroupBox_NewAlertsFileDestination
+            // GroupBox_AlarmFileMerge
             // 
-            GroupBox_NewAlertsFileDestination.Controls.Add(Button_NewAlertSelectFileDestination);
-            GroupBox_NewAlertsFileDestination.Controls.Add(TextBox_NewAlertFileDestination);
-            resources.ApplyResources(GroupBox_NewAlertsFileDestination, "GroupBox_NewAlertsFileDestination");
-            GroupBox_NewAlertsFileDestination.Name = "GroupBox_NewAlertsFileDestination";
-            GroupBox_NewAlertsFileDestination.TabStop = false;
+            GroupBox_AlarmFileMerge.Controls.Add(Button_MachineAlarmFileSelect);
+            GroupBox_AlarmFileMerge.Controls.Add(TextBox_FileToMergeInto);
+            resources.ApplyResources(GroupBox_AlarmFileMerge, "GroupBox_AlarmFileMerge");
+            GroupBox_AlarmFileMerge.Name = "GroupBox_AlarmFileMerge";
+            GroupBox_AlarmFileMerge.TabStop = false;
             // 
-            // Button_NewAlertSelectFileDestination
+            // Button_MachineAlarmFileSelect
             // 
-            resources.ApplyResources(Button_NewAlertSelectFileDestination, "Button_NewAlertSelectFileDestination");
-            Button_NewAlertSelectFileDestination.Name = "Button_NewAlertSelectFileDestination";
-            Button_NewAlertSelectFileDestination.UseVisualStyleBackColor = true;
-            Button_NewAlertSelectFileDestination.Click += ButtonSelectFolderNewAlertFileDest_OnClick;
+            resources.ApplyResources(Button_MachineAlarmFileSelect, "Button_MachineAlarmFileSelect");
+            Button_MachineAlarmFileSelect.Name = "Button_MachineAlarmFileSelect";
+            Button_MachineAlarmFileSelect.UseVisualStyleBackColor = true;
+            Button_MachineAlarmFileSelect.Click += ButtonSelectFolderAlertFile_OnClick;
             // 
-            // TextBox_NewAlertFileDestination
+            // TextBox_FileToMergeInto
             // 
-            TextBox_NewAlertFileDestination.AllowDrop = true;
-            resources.ApplyResources(TextBox_NewAlertFileDestination, "TextBox_NewAlertFileDestination");
-            TextBox_NewAlertFileDestination.Name = "TextBox_NewAlertFileDestination";
+            TextBox_FileToMergeInto.AllowDrop = true;
+            resources.ApplyResources(TextBox_FileToMergeInto, "TextBox_FileToMergeInto");
+            TextBox_FileToMergeInto.Name = "TextBox_FileToMergeInto";
             // 
             // groupBox_NewAlerts
             // 
@@ -243,9 +297,11 @@
             TabPage_Translate.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             TabPage_NewAlerts.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             GroupBox_NewAlertsOptions.ResumeLayout(false);
-            GroupBox_NewAlertsFileDestination.ResumeLayout(false);
-            GroupBox_NewAlertsFileDestination.PerformLayout();
+            GroupBox_AlarmFileMerge.ResumeLayout(false);
+            GroupBox_AlarmFileMerge.PerformLayout();
             groupBox_NewAlerts.ResumeLayout(false);
             groupBox_NewAlerts.PerformLayout();
             ResumeLayout(false);
@@ -270,11 +326,17 @@
         private GroupBox groupBox_NewAlerts;
         private Button Button_SelectNewAlerts;
         private TextBox TextBox_NewAlerts;
-        private GroupBox GroupBox_NewAlertsFileDestination;
-        private Button Button_NewAlertSelectFileDestination;
         private Button Button_ConvertTxt;
-        private TextBox TextBox_NewAlertFileDestination;
         private GroupBox GroupBox_NewAlertsOptions;
         private GroupBox groupBox1;
+        private Button Button_MergeJsonFiles;
+        private GroupBox groupBox2;
+        private CheckBox CheckBox_Quad;
+        private CheckBox CheckBox_Trike;
+        private CheckBox CheckBox_QSeries;
+        private CheckBox CheckBox_BEX25;
+        private GroupBox GroupBox_AlarmFileMerge;
+        private Button Button_MachineAlarmFileSelect;
+        private TextBox TextBox_FileToMergeInto;
     }
 }

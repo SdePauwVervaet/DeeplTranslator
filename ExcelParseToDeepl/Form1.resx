@@ -147,7 +147,7 @@
     <value>Verdana, 9pt</value>
   </data>
   <data name="Button_GenerateGlossaries.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 21</value>
+    <value>10, 19</value>
   </data>
   <data name="Button_GenerateGlossaries.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 24</value>
@@ -198,7 +198,7 @@
     <value>Verdana, 9pt</value>
   </data>
   <data name="Button_TranslateAlerts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 81</value>
+    <value>10, 79</value>
   </data>
   <data name="Button_TranslateAlerts.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 24</value>
@@ -1662,50 +1662,14 @@
   <data name="TabControl_Main.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
-  <data name="&gt;&gt;TabPage_Translate.Name" xml:space="preserve">
-    <value>TabPage_Translate</value>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>530, 6</value>
   </data>
-  <data name="&gt;&gt;TabPage_Translate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 139</value>
   </data>
-  <data name="&gt;&gt;TabPage_Translate.Parent" xml:space="preserve">
-    <value>TabControl_Main</value>
-  </data>
-  <data name="&gt;&gt;TabPage_Translate.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Name" xml:space="preserve">
-    <value>TabPage_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Parent" xml:space="preserve">
-    <value>TabControl_Main</value>
-  </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="TabControl_Main.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
-  </data>
-  <data name="TabControl_Main.Size" type="System.Drawing.Size, System.Drawing">
-    <value>710, 178</value>
-  </data>
-  <data name="TabControl_Main.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="&gt;&gt;TabControl_Main.Name" xml:space="preserve">
-    <value>TabControl_Main</value>
-  </data>
-  <data name="&gt;&gt;TabControl_Main.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TabControl_Main.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;TabControl_Main.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -1747,121 +1711,187 @@
   <data name="&gt;&gt;TabPage_Translate.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>530, 6</value>
+  <data name="CheckBox_Quad.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left</value>
   </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 139</value>
+  <data name="CheckBox_Quad.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
+  <data name="CheckBox_Quad.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
+  <data name="CheckBox_Quad.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 110</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="CheckBox_Quad.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 18</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>TabPage_Translate</value>
+  <data name="CheckBox_Quad.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+  <data name="CheckBox_Quad.Text" xml:space="preserve">
+    <value>Quad</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_Quad.Name" xml:space="preserve">
+    <value>CheckBox_Quad</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_Quad.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_Quad.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_Quad.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Name" xml:space="preserve">
-    <value>GroupBox_NewAlertsOptions</value>
+  <data name="CheckBox_Trike.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="CheckBox_Trike.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Parent" xml:space="preserve">
-    <value>TabPage_NewAlerts</value>
+  <data name="CheckBox_Trike.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="CheckBox_Trike.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 80</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Name" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
+  <data name="CheckBox_Trike.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 18</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Parent" xml:space="preserve">
-    <value>TabPage_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Name" xml:space="preserve">
-    <value>groupBox_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Parent" xml:space="preserve">
-    <value>TabPage_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.ZOrder" xml:space="preserve">
+  <data name="CheckBox_Trike.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="TabPage_NewAlerts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 23</value>
+  <data name="CheckBox_Trike.Text" xml:space="preserve">
+    <value>Trike</value>
   </data>
-  <data name="TabPage_NewAlerts.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="&gt;&gt;CheckBox_Trike.Name" xml:space="preserve">
+    <value>CheckBox_Trike</value>
   </data>
-  <data name="TabPage_NewAlerts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>702, 151</value>
+  <data name="&gt;&gt;CheckBox_Trike.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="TabPage_NewAlerts.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;CheckBox_Trike.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_Trike.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="TabPage_NewAlerts.Text" xml:space="preserve">
-    <value>New Alerts Converter</value>
+  <data name="CheckBox_QSeries.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left</value>
   </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Name" xml:space="preserve">
-    <value>TabPage_NewAlerts</value>
+  <data name="CheckBox_QSeries.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="CheckBox_QSeries.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.Parent" xml:space="preserve">
-    <value>TabControl_Main</value>
+  <data name="CheckBox_QSeries.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 50</value>
   </data>
-  <data name="&gt;&gt;TabPage_NewAlerts.ZOrder" xml:space="preserve">
+  <data name="CheckBox_QSeries.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 18</value>
+  </data>
+  <data name="CheckBox_QSeries.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;Button_ConvertTxt.Name" xml:space="preserve">
-    <value>Button_ConvertTxt</value>
+  <data name="CheckBox_QSeries.Text" xml:space="preserve">
+    <value>Q-Series</value>
   </data>
-  <data name="&gt;&gt;Button_ConvertTxt.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;CheckBox_QSeries.Name" xml:space="preserve">
+    <value>CheckBox_QSeries</value>
   </data>
-  <data name="&gt;&gt;Button_ConvertTxt.Parent" xml:space="preserve">
-    <value>GroupBox_NewAlertsOptions</value>
+  <data name="&gt;&gt;CheckBox_QSeries.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Button_ConvertTxt.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;CheckBox_QSeries.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;CheckBox_QSeries.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="CheckBox_BEX25.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left</value>
+  </data>
+  <data name="CheckBox_BEX25.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CheckBox_BEX25.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 20</value>
+  </data>
+  <data name="CheckBox_BEX25.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 18</value>
+  </data>
+  <data name="CheckBox_BEX25.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="GroupBox_NewAlertsOptions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>530, 6</value>
+  <data name="CheckBox_BEX25.Text" xml:space="preserve">
+    <value>BE-X25</value>
   </data>
-  <data name="GroupBox_NewAlertsOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 139</value>
+  <data name="&gt;&gt;CheckBox_BEX25.Name" xml:space="preserve">
+    <value>CheckBox_BEX25</value>
   </data>
-  <data name="GroupBox_NewAlertsOptions.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
+  <data name="&gt;&gt;CheckBox_BEX25.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Name" xml:space="preserve">
-    <value>GroupBox_NewAlertsOptions</value>
+  <data name="&gt;&gt;CheckBox_BEX25.Parent" xml:space="preserve">
+    <value>groupBox2</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Type" xml:space="preserve">
+  <data name="&gt;&gt;CheckBox_BEX25.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>605, 6</value>
+  </data>
+  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 142</value>
+  </data>
+  <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Parent" xml:space="preserve">
+  <data name="&gt;&gt;groupBox2.Parent" xml:space="preserve">
     <value>TabPage_NewAlerts</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsOptions.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Button_MergeJsonFiles.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="Button_MergeJsonFiles.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 9pt</value>
+  </data>
+  <data name="Button_MergeJsonFiles.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Button_MergeJsonFiles.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 49</value>
+  </data>
+  <data name="Button_MergeJsonFiles.Size" type="System.Drawing.Size, System.Drawing">
+    <value>130, 24</value>
+  </data>
+  <data name="Button_MergeJsonFiles.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="Button_MergeJsonFiles.Text" xml:space="preserve">
+    <value>Merge Files</value>
+  </data>
+  <data name="&gt;&gt;Button_MergeJsonFiles.Name" xml:space="preserve">
+    <value>Button_MergeJsonFiles</value>
+  </data>
+  <data name="&gt;&gt;Button_MergeJsonFiles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Button_MergeJsonFiles.Parent" xml:space="preserve">
+    <value>GroupBox_NewAlertsOptions</value>
+  </data>
+  <data name="&gt;&gt;Button_MergeJsonFiles.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="Button_ConvertTxt.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -1874,10 +1904,10 @@
     <value>NoControl</value>
   </data>
   <data name="Button_ConvertTxt.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 21</value>
+    <value>10, 19</value>
   </data>
   <data name="Button_ConvertTxt.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 24</value>
+    <value>130, 24</value>
   </data>
   <data name="Button_ConvertTxt.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -1895,60 +1925,30 @@
     <value>GroupBox_NewAlertsOptions</value>
   </data>
   <data name="&gt;&gt;Button_ConvertTxt.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Name" xml:space="preserve">
-    <value>Button_NewAlertSelectFileDestination</value>
-  </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Parent" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
-  </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Name" xml:space="preserve">
-    <value>TextBox_NewAlertFileDestination</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Parent" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="GroupBox_NewAlertsFileDestination.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 9pt</value>
+  <data name="GroupBox_NewAlertsOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>450, 6</value>
   </data>
-  <data name="GroupBox_NewAlertsFileDestination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 81</value>
+  <data name="GroupBox_NewAlertsOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 139</value>
   </data>
-  <data name="GroupBox_NewAlertsFileDestination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>518, 64</value>
+  <data name="GroupBox_NewAlertsOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
   </data>
-  <data name="GroupBox_NewAlertsFileDestination.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
+  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Name" xml:space="preserve">
+    <value>GroupBox_NewAlertsOptions</value>
   </data>
-  <data name="GroupBox_NewAlertsFileDestination.Text" xml:space="preserve">
-    <value>File Destination : Folder</value>
-  </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Name" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
-  </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Type" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.Parent" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_NewAlertsOptions.Parent" xml:space="preserve">
     <value>TabPage_NewAlerts</value>
   </data>
-  <data name="&gt;&gt;GroupBox_NewAlertsFileDestination.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_NewAlertsOptions.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Button_MachineAlarmFileSelect.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAArwAAAK8CAYAAAANumxDAAABb2lDQ1BpY2MAACjPlZG9S8NAGMaffkjF
         VjqoICKYoYpDC0VBHKWCXapDW8GqS3JNWiFJwyVFiqvg4lBwEF38GvwPdBVcFQRBEUTc3P1apMT3mkKL
@@ -2581,109 +2581,85 @@
         Zq1tFxEREZFGQOBKFpiNp0xWXDSyWZPuD/TeFhERERGR7jLddP8/2gzL5SYJQVMAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+  <data name="Button_MachineAlarmFileSelect.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="Button_MachineAlarmFileSelect.Font" type="System.Drawing.Font, System.Drawing">
     <value>Verdana, 9pt</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="Button_MachineAlarmFileSelect.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>485, 21</value>
+  <data name="Button_MachineAlarmFileSelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>409, 21</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="Button_MachineAlarmFileSelect.Size" type="System.Drawing.Size, System.Drawing">
     <value>23, 22</value>
   </data>
-  <data name="Button_NewAlertSelectFileDestination.TabIndex" type="System.Int32, mscorlib">
+  <data name="Button_MachineAlarmFileSelect.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Name" xml:space="preserve">
-    <value>Button_NewAlertSelectFileDestination</value>
+  <data name="&gt;&gt;Button_MachineAlarmFileSelect.Name" xml:space="preserve">
+    <value>Button_MachineAlarmFileSelect</value>
   </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Type" xml:space="preserve">
+  <data name="&gt;&gt;Button_MachineAlarmFileSelect.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.Parent" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
+  <data name="&gt;&gt;Button_MachineAlarmFileSelect.Parent" xml:space="preserve">
+    <value>GroupBox_AlarmFileMerge</value>
   </data>
-  <data name="&gt;&gt;Button_NewAlertSelectFileDestination.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;Button_MachineAlarmFileSelect.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="TextBox_NewAlertFileDestination.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="TextBox_FileToMergeInto.Font" type="System.Drawing.Font, System.Drawing">
     <value>Verdana, 9pt</value>
   </data>
-  <data name="TextBox_NewAlertFileDestination.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="TextBox_FileToMergeInto.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 22</value>
   </data>
-  <data name="TextBox_NewAlertFileDestination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>473, 22</value>
+  <data name="TextBox_FileToMergeInto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>397, 22</value>
   </data>
-  <data name="TextBox_NewAlertFileDestination.TabIndex" type="System.Int32, mscorlib">
+  <data name="TextBox_FileToMergeInto.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Name" xml:space="preserve">
-    <value>TextBox_NewAlertFileDestination</value>
+  <data name="&gt;&gt;TextBox_FileToMergeInto.Name" xml:space="preserve">
+    <value>TextBox_FileToMergeInto</value>
   </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Type" xml:space="preserve">
+  <data name="&gt;&gt;TextBox_FileToMergeInto.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.Parent" xml:space="preserve">
-    <value>GroupBox_NewAlertsFileDestination</value>
+  <data name="&gt;&gt;TextBox_FileToMergeInto.Parent" xml:space="preserve">
+    <value>GroupBox_AlarmFileMerge</value>
   </data>
-  <data name="&gt;&gt;TextBox_NewAlertFileDestination.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;TextBox_FileToMergeInto.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;Button_SelectNewAlerts.Name" xml:space="preserve">
-    <value>Button_SelectNewAlerts</value>
-  </data>
-  <data name="&gt;&gt;Button_SelectNewAlerts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Button_SelectNewAlerts.Parent" xml:space="preserve">
-    <value>groupBox_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;Button_SelectNewAlerts.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlerts.Name" xml:space="preserve">
-    <value>TextBox_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlerts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlerts.Parent" xml:space="preserve">
-    <value>groupBox_NewAlerts</value>
-  </data>
-  <data name="&gt;&gt;TextBox_NewAlerts.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="groupBox_NewAlerts.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="GroupBox_AlarmFileMerge.Font" type="System.Drawing.Font, System.Drawing">
     <value>Verdana, 9pt</value>
   </data>
-  <data name="groupBox_NewAlerts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 6</value>
+  <data name="GroupBox_AlarmFileMerge.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 81</value>
   </data>
-  <data name="groupBox_NewAlerts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>518, 64</value>
+  <data name="GroupBox_AlarmFileMerge.Size" type="System.Drawing.Size, System.Drawing">
+    <value>438, 64</value>
   </data>
-  <data name="groupBox_NewAlerts.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
+  <data name="GroupBox_AlarmFileMerge.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
   </data>
-  <data name="groupBox_NewAlerts.Text" xml:space="preserve">
-    <value>New Alerts : Folder</value>
+  <data name="GroupBox_AlarmFileMerge.Text" xml:space="preserve">
+    <value>Machine Alarm File : .json</value>
   </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Name" xml:space="preserve">
-    <value>groupBox_NewAlerts</value>
+  <data name="&gt;&gt;GroupBox_AlarmFileMerge.Name" xml:space="preserve">
+    <value>GroupBox_AlarmFileMerge</value>
   </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Type" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_AlarmFileMerge.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.Parent" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_AlarmFileMerge.Parent" xml:space="preserve">
     <value>TabPage_NewAlerts</value>
   </data>
-  <data name="&gt;&gt;groupBox_NewAlerts.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;GroupBox_AlarmFileMerge.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="Button_SelectNewAlerts.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -3329,7 +3305,7 @@
     <value>NoControl</value>
   </data>
   <data name="Button_SelectNewAlerts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>485, 21</value>
+    <value>409, 22</value>
   </data>
   <data name="Button_SelectNewAlerts.Size" type="System.Drawing.Size, System.Drawing">
     <value>23, 22</value>
@@ -3356,7 +3332,7 @@
     <value>6, 22</value>
   </data>
   <data name="TextBox_NewAlerts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>473, 22</value>
+    <value>397, 22</value>
   </data>
   <data name="TextBox_NewAlerts.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -3371,6 +3347,81 @@
     <value>groupBox_NewAlerts</value>
   </data>
   <data name="&gt;&gt;TextBox_NewAlerts.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="groupBox_NewAlerts.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 9pt</value>
+  </data>
+  <data name="groupBox_NewAlerts.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="groupBox_NewAlerts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>438, 64</value>
+  </data>
+  <data name="groupBox_NewAlerts.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="groupBox_NewAlerts.Text" xml:space="preserve">
+    <value>New Alerts : Folder</value>
+  </data>
+  <data name="&gt;&gt;groupBox_NewAlerts.Name" xml:space="preserve">
+    <value>groupBox_NewAlerts</value>
+  </data>
+  <data name="&gt;&gt;groupBox_NewAlerts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox_NewAlerts.Parent" xml:space="preserve">
+    <value>TabPage_NewAlerts</value>
+  </data>
+  <data name="&gt;&gt;groupBox_NewAlerts.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="TabPage_NewAlerts.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 23</value>
+  </data>
+  <data name="TabPage_NewAlerts.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="TabPage_NewAlerts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>702, 151</value>
+  </data>
+  <data name="TabPage_NewAlerts.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="TabPage_NewAlerts.Text" xml:space="preserve">
+    <value>New Alerts Converter</value>
+  </data>
+  <data name="&gt;&gt;TabPage_NewAlerts.Name" xml:space="preserve">
+    <value>TabPage_NewAlerts</value>
+  </data>
+  <data name="&gt;&gt;TabPage_NewAlerts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabPage_NewAlerts.Parent" xml:space="preserve">
+    <value>TabControl_Main</value>
+  </data>
+  <data name="&gt;&gt;TabPage_NewAlerts.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TabControl_Main.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="TabControl_Main.Size" type="System.Drawing.Size, System.Drawing">
+    <value>710, 178</value>
+  </data>
+  <data name="TabControl_Main.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;TabControl_Main.Name" xml:space="preserve">
+    <value>TabControl_Main</value>
+  </data>
+  <data name="&gt;&gt;TabControl_Main.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabControl_Main.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;TabControl_Main.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

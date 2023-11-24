@@ -1,10 +1,15 @@
-﻿namespace DeeplTranslator
+﻿using Microsoft.VisualBasic.Logging;
+using Newtonsoft.Json.Linq;
+
+namespace DeeplTranslator
 {
     public class TranslatorService
     {
         private const string DeeplAuthKey = "059d0c16-9fed-8d68-544b-2b9d0413c4b3:fx";
-        private readonly BatchTranslator _batchTranslator = new BatchTranslator(DeeplAuthKey);
-        private readonly TxtConverter _txtConverter = new TxtConverter(DeeplAuthKey);
+        private static readonly string[] Exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
+        private readonly BatchTranslator _batchTranslator = new BatchTranslator(DeeplAuthKey, Exceptions);
+        private readonly TxtConverter _txtConverter = new TxtConverter(DeeplAuthKey, Exceptions);
+        private readonly JsonMerger _jsonMerger = new JsonMerger();
         private readonly GlossaryManager _glossaryManager = new GlossaryManager(DeeplAuthKey);
         public readonly ExcelParser ExcelParser = new ExcelParser();
 
@@ -59,11 +64,30 @@
             Logger.LogMessage($"~~~Done with glossaries~~~" + Environment.NewLine);
         }
 
-        public async void ConvertTxtFiles(string file, string resultFilePath)
+        public async Task ConvertTxtFiles(string folderPath, string mergedFileName)
         {
-            string fileName = Path.GetFileName(file);
-            string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
-            _txtConverter.ConvertFileToJson(path, fileName, resultFilePath);
+            var txtFiles = Directory.GetFiles(folderPath, "*.txt").ToList();
+
+            
+            foreach (string file in txtFiles)
+            {
+                string fileName = Path.GetFileName(file);
+                string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
+                await _txtConverter.ConvertFileToJson(path, fileName);
+            }
+
+            await MergeJsonFiles(folderPath, ("MERGED" + mergedFileName), "");
+        }
+
+        public async Task MergeJsonFiles(string folderPath, string mergedFileName, string alertsFolderPath)
+        {
+            if (!String.IsNullOrWhiteSpace(alertsFolderPath))
+            {
+                await _jsonMerger.MergeJObjects(folderPath, (mergedFileName), alertsFolderPath);
+                return;
+            }
+            
+            await _jsonMerger.MergeJObjects(folderPath, (Path.Combine(folderPath, mergedFileName)));
         }
     }
 }

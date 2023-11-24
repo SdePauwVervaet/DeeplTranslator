@@ -9,12 +9,14 @@ namespace DeeplTranslator
         private readonly Translator _translator;
         private readonly GlossaryManager _glossaryManager;
         private readonly JsonUtility _jsonUtility;
-        private readonly string[] _exceptions = { "VF.", "VolvoEngine.", "VolvoAcm." };
         private const int BatchSize = 100;
+        private readonly string[] _exceptions;
 
-        public BatchTranslator(string authKey)
+
+        public BatchTranslator(string authKey, string[] exceptions)
         {
             this._translator = new Translator(authKey);
+            this._exceptions = exceptions;
             this._glossaryManager = new GlossaryManager(authKey);
             this._jsonUtility = new JsonUtility();
         }

@@ -2,8 +2,9 @@
 using DeepL.Model;
 using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace DeeplTranslator
 {
@@ -12,9 +13,11 @@ namespace DeeplTranslator
         private readonly JsonUtility _jsonUtility;
         private readonly Translator _translator;
         private readonly Dictionary<string, string> _alarmColors;
-        public TxtConverter(string authKey)
+        private readonly string[] _exceptions;
+        public TxtConverter(string authKey, string[] exceptions)
         {
             this._translator = new Translator(authKey);
+            this._exceptions = exceptions;
             _jsonUtility = new JsonUtility();
             _alarmColors = new Dictionary<string, string>()
             {
@@ -27,7 +30,7 @@ namespace DeeplTranslator
             };
         }
 
-        public async void ConvertFileToJson(string filePath, string fileName, string resultFilePath)
+        public async Task ConvertFileToJson(string filePath, string fileName)
         {
             Logger.LogMessage($"Converting: {filePath}\\{fileName}");
 
@@ -37,15 +40,20 @@ namespace DeeplTranslator
             //First line are the different languages in order
             Logger.LogMessage(lines[0]);
             var languagesCodes = await GetLanguagesFromFile(lines[0]);
-            
             lines.Remove(lines[0]);
             
             var translations = new Dictionary<string, Dictionary<string, string>>();
 
             foreach (string line in lines)
             {
-                Logger.LogMessage(line);
-                var values = line.Split(';').Select(value => value.Trim()).ToList();
+                string _line = line;
+                if (line.Contains('$'))
+                {
+                    _line = line.Replace("$", "");
+                }
+                
+                Logger.LogMessage(_line);
+                var values = _line.Split(';').Select(value => value.Trim()).ToList();
                 string id = values[0];
                 values.RemoveAt(0);
 
@@ -61,7 +69,14 @@ namespace DeeplTranslator
                         translations[languageCode] = new Dictionary<string, string>();
                     }
 
-                    translations[languageCode][(alarmColor + id)] = translation;
+                    if (_exceptions.Any(exception => id.Contains(exception)))
+                    {
+                        translations[languageCode][(id)] = translation;
+                    }
+                    else
+                    {
+                        translations[languageCode][(alarmColor + id)] = translation;
+                    }
                 }
             }
             
