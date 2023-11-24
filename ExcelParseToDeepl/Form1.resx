@@ -1861,6 +1861,39 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="Button_ConvertOldFileToNew.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 9pt</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 109</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>130, 24</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="Button_ConvertOldFileToNew.Text" xml:space="preserve">
+    <value>Convert Old Keys</value>
+  </data>
+  <data name="&gt;&gt;Button_ConvertOldFileToNew.Name" xml:space="preserve">
+    <value>Button_ConvertOldFileToNew</value>
+  </data>
+  <data name="&gt;&gt;Button_ConvertOldFileToNew.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Button_ConvertOldFileToNew.Parent" xml:space="preserve">
+    <value>GroupBox_NewAlertsOptions</value>
+  </data>
+  <data name="&gt;&gt;Button_ConvertOldFileToNew.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="Button_MergeJsonFiles.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
@@ -1892,7 +1925,7 @@
     <value>GroupBox_NewAlertsOptions</value>
   </data>
   <data name="&gt;&gt;Button_MergeJsonFiles.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="Button_ConvertTxt.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -1925,7 +1958,7 @@
     <value>GroupBox_NewAlertsOptions</value>
   </data>
   <data name="&gt;&gt;Button_ConvertTxt.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="GroupBox_NewAlertsOptions.Location" type="System.Drawing.Point, System.Drawing">
     <value>450, 6</value>

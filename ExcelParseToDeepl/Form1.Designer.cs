@@ -57,6 +57,7 @@
             groupBox_NewAlerts = new GroupBox();
             Button_SelectNewAlerts = new Button();
             TextBox_NewAlerts = new TextBox();
+            Button_ConvertOldFileToNew = new Button();
             GroupBox_Glossaries.SuspendLayout();
             GroupBox_Translations.SuspendLayout();
             TabControl_Main.SuspendLayout();
@@ -219,6 +220,7 @@
             // 
             // GroupBox_NewAlertsOptions
             // 
+            GroupBox_NewAlertsOptions.Controls.Add(Button_ConvertOldFileToNew);
             GroupBox_NewAlertsOptions.Controls.Add(Button_MergeJsonFiles);
             GroupBox_NewAlertsOptions.Controls.Add(Button_ConvertTxt);
             resources.ApplyResources(GroupBox_NewAlertsOptions, "GroupBox_NewAlertsOptions");
@@ -281,6 +283,13 @@
             resources.ApplyResources(TextBox_NewAlerts, "TextBox_NewAlerts");
             TextBox_NewAlerts.Name = "TextBox_NewAlerts";
             // 
+            // Button_ConvertOldFileToNew
+            // 
+            resources.ApplyResources(Button_ConvertOldFileToNew, "Button_ConvertOldFileToNew");
+            Button_ConvertOldFileToNew.Name = "Button_ConvertOldFileToNew";
+            Button_ConvertOldFileToNew.UseVisualStyleBackColor = true;
+            Button_ConvertOldFileToNew.Click += ConvertOldKeys_OnClick;
+            // 
             // Form1
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -338,5 +347,6 @@
         private GroupBox GroupBox_AlarmFileMerge;
         private Button Button_MachineAlarmFileSelect;
         private TextBox TextBox_FileToMergeInto;
+        private Button Button_ConvertOldFileToNew;
     }
 }

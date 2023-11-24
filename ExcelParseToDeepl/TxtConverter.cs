@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DeeplTranslator
 {
@@ -89,6 +91,75 @@ namespace DeeplTranslator
             //write json
             string newFileName = Path.ChangeExtension(fileName, ".json");
             await File.WriteAllTextAsync(Path.Combine(filePath, newFileName), jsonString, Encoding.UTF8);
+        }
+
+        public async Task ConvertOldKeysToNew(string filePath, string fileName)
+        {
+            Logger.LogMessage($"Started Converting old keys for {fileName}");
+            // Read the JSON file into a JObject
+            string jsonSource = await File.ReadAllTextAsync(Path.Combine(filePath, fileName));
+
+            JObject fileObject = JObject.Parse(jsonSource);
+
+            foreach (JProperty languageSection in fileObject.Children())
+            {
+                string languageCode = languageSection.Name;
+                int count = 0;
+
+                // Dictionary to keep track of unique values and their counts
+                Dictionary<string, int> valueCounts = new Dictionary<string, int>();
+
+                foreach (JProperty property in languageSection.Value.OfType<JProperty>().ToList())
+                {
+                    count++;
+                    Logger.LogMessage($"Converting {count}/{languageSection.Value.OfType<JProperty>().ToList().Count} of {languageCode}");
+                    string originalValue = property.Value.ToString();
+
+                    if (!originalValue.Contains(':'))
+                    {
+                        Logger.LogMessage($"{originalValue} does not contain ':'");
+                        continue;
+                    }
+
+                    string[] parts = originalValue.Split(':');
+
+                    if (parts.Length == 2)
+                    {
+                        // Extract "red 12" and remove spaces
+                        string newKey = parts[0].Trim().Replace(" ", "");
+
+                        // Check if the new key already exists
+                        JToken existingToken = languageSection.Value[newKey];
+                        if (existingToken != null)
+                        {
+                            // If the value is already encountered, append "-double" to the key
+                            if (valueCounts.TryGetValue(parts[1].Trim(), out int valueCount))
+                            {
+                                newKey += $"-double-{valueCount}";
+                                valueCount++;
+                                valueCounts[parts[1].Trim()] = valueCount;
+                            }
+                            else
+                            {
+                                // If encountering the value for the first time, add it to the dictionary
+                                valueCounts.Add(parts[1].Trim(), 2);
+                                newKey += "-double";
+                            }
+
+                            Logger.LogMessage($"{newKey} already exists in {languageCode}. Appending '-double'.");
+                        }
+
+                        // Update the key with the new value
+                        property.Replace(new JProperty(newKey, originalValue));
+                    }
+                }
+            }
+
+            // Create a new file with the updated JObject
+            string newFileName = "NEW" + fileName;
+            await File.WriteAllTextAsync(Path.Combine(filePath, newFileName), fileObject.ToString(), Encoding.UTF8);
+            Logger.LogMessage("Finished Converting!");
+            Console.WriteLine("New file created: " + newFileName);
         }
 
         private async Task<List<string>> GetLanguagesFromFile(string languages)

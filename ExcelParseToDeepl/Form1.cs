@@ -260,5 +260,12 @@ namespace DeeplTranslator
             }
             _currentSelectedMachineTypeAlarmFileName = _machineTypeCheckBoxes[selectedCheckBox];
         }
+
+        private async void ConvertOldKeys_OnClick(object sender, EventArgs e)
+        {
+            string fileFolderPath = TextBox_NewAlerts.Text.Trim();
+
+            await _translatorService.ConvertOldKeysToNewKeys(fileFolderPath);
+        }
     }
 }

@@ -89,5 +89,18 @@ namespace DeeplTranslator
             
             await _jsonMerger.MergeJObjects(folderPath, (Path.Combine(folderPath, mergedFileName)));
         }
+
+        public async Task ConvertOldKeysToNewKeys(string folderPath)
+        {
+            var files = Directory.GetFiles(folderPath, "*.json").ToList();
+
+            
+            foreach (string file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
+                await _txtConverter.ConvertOldKeysToNew(path, fileName);
+            }
+        }
     }
 }

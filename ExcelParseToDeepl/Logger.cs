@@ -2,36 +2,26 @@
 {
     public static class Logger
     {
-        private static TextBox _textBox = null!;
+        private static TextBox _textBoxLogger = null!;
+        private static int counter = 0;
         
         public static void InitializeLogger(TextBox textBox)
         {
-            _textBox = textBox ?? throw new ArgumentNullException($"Logger cannot be initialized because {nameof(textBox)} is null");
+            _textBoxLogger = textBox ?? throw new ArgumentNullException($"Logger cannot be initialized because {nameof(textBox)} is null");
         }
 
-        // public static async Task LogMessage(string message)
-        // {
-        //     await Task.Run(() =>
-        //     {
-        //         _textBox.AppendText($"{message} \r\n");
-        //         _textBox.Select(_textBox.Text.Length - 1, 0);
-        //         _textBox.ScrollToCaret();
-        //         _textBox.Update();
-        //     });
-        // }
-        
         public static void LogMessage(string message)
         {
-            if (_textBox.InvokeRequired)
+            if (_textBoxLogger.InvokeRequired)
             {
-                _textBox.Invoke(new Action(() => LogMessage(message)));
+                _textBoxLogger.Invoke(new Action(() => LogMessage(message)));
             }
             else
             {
-                _textBox.AppendText($"{message} \r\n");
-                _textBox.Select(_textBox.Text.Length - 1, 0);
-                _textBox.ScrollToCaret();
-                _textBox.Update();
+                _textBoxLogger.AppendText($"{message} \r\n");
+                _textBoxLogger.Select(_textBoxLogger.Text.Length - 1, 0);
+                _textBoxLogger.ScrollToCaret();
+                _textBoxLogger.Update();
             }
         }
     }
