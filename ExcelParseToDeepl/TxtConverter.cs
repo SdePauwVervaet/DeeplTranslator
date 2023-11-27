@@ -48,14 +48,14 @@ namespace DeeplTranslator
 
             foreach (string line in lines)
             {
-                string _line = line;
+                string replace = line;
                 if (line.Contains('$'))
                 {
-                    _line = line.Replace("$", "");
+                    replace = line.Replace("$", "");
                 }
                 
-                Logger.LogMessage(_line);
-                var values = _line.Split(';').Select(value => value.Trim()).ToList();
+                Logger.LogMessage(replace);
+                var values = replace.Split(';').Select(value => value.Trim()).ToList();
                 string id = values[0];
                 values.RemoveAt(0);
 
@@ -123,35 +123,34 @@ namespace DeeplTranslator
 
                     string[] parts = originalValue.Split(':');
 
-                    if (parts.Length == 2)
+                    if (parts.Length != 2) continue;
+                    
+                    // Extract "red 12" and remove spaces
+                    string newKey = parts[0].Trim().Replace(" ", "");
+
+                    // Check if the new key already exists
+                    JToken existingToken = languageSection.Value[newKey];
+                    if (existingToken != null)
                     {
-                        // Extract "red 12" and remove spaces
-                        string newKey = parts[0].Trim().Replace(" ", "");
-
-                        // Check if the new key already exists
-                        JToken existingToken = languageSection.Value[newKey];
-                        if (existingToken != null)
+                        // If the value is already encountered, append "-double" to the key
+                        if (valueCounts.TryGetValue(parts[1].Trim(), out int valueCount))
                         {
-                            // If the value is already encountered, append "-double" to the key
-                            if (valueCounts.TryGetValue(parts[1].Trim(), out int valueCount))
-                            {
-                                newKey += $"-double-{valueCount}";
-                                valueCount++;
-                                valueCounts[parts[1].Trim()] = valueCount;
-                            }
-                            else
-                            {
-                                // If encountering the value for the first time, add it to the dictionary
-                                valueCounts.Add(parts[1].Trim(), 2);
-                                newKey += "-double";
-                            }
-
-                            Logger.LogMessage($"{newKey} already exists in {languageCode}. Appending '-double'.");
+                            newKey += $"-double-{valueCount}";
+                            valueCount++;
+                            valueCounts[parts[1].Trim()] = valueCount;
+                        }
+                        else
+                        {
+                            // If encountering the value for the first time, add it to the dictionary
+                            valueCounts.Add(parts[1].Trim(), 2);
+                            newKey += "-double";
                         }
 
-                        // Update the key with the new value
-                        property.Replace(new JProperty(newKey, originalValue));
+                        Logger.LogMessage($"{newKey} already exists in {languageCode}. Appending '-double'.");
                     }
+
+                    // Update the key with the new value
+                    property.Replace(new JProperty(newKey, originalValue));
                 }
             }
 
