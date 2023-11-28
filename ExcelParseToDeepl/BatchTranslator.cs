@@ -1,6 +1,7 @@
 ﻿using DeepL;
 using DeepL.Model;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace DeeplTranslator
 {
@@ -54,10 +55,10 @@ namespace DeeplTranslator
                     {
                         string tokenParent = token.Parent.ToString()!;
                         string pathToToken = token.Path;
-                        string tokenValue = token.Value<string>();
+                        string sourceTokenValue = token.Value<string>();
                         string tokenKeyValue = _jsonUtility.ExtractTokenKeyValue(tokenParent, token);
-
-                        if (_jsonUtility.IsKeyInTargetLanguage(targetLanguage, tokenKeyValue)) return;
+                        string? targetTokenValue = targetLanguage[tokenKeyValue]?.Value<string>();
+                        if (!TranslateEmptyToken(targetLanguage, tokenKeyValue, language, sourceTokenValue, targetTokenValue)) return;
 
                         // Don't translate engine faults or exceptions
                         if (_exceptions.Any(exception => tokenKeyValue.Contains(exception)))
@@ -67,7 +68,7 @@ namespace DeeplTranslator
                         }
 
                         // Key doesn't exist in the target language, add it and translate the value
-                        string translatedValue = await HandleTranslationRequest(tokenValue ?? throw new InvalidOperationException(), sourceLanguage, language);
+                        string translatedValue = await HandleTranslationRequest(sourceTokenValue ?? throw new InvalidOperationException(), sourceLanguage, language);
                         List<string> tokenPath;
                         try
                         {
@@ -93,7 +94,7 @@ namespace DeeplTranslator
             TimeSpan translationTime = DateTime.Now - dateAndTime;
             Logger.LogMessage($"Translation finished! Time: {translationTime:mm\\:ss\\:ff}");
         }
-        
+
         // Update connect language files
         public async Task UpdateSourceToTargetLanguage(string sourceFilename, string targetFileName, string path)
         {
@@ -207,6 +208,26 @@ namespace DeeplTranslator
             }
             Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
             return translatedText.ToString();
+        }
+        
+        private bool TranslateEmptyToken(JObject targetLanguage, string tokenKeyValue, string language, string sourceTokenValue, string? targetTokenValue)
+        {
+            
+            if (!_jsonUtility.IsKeyInTargetLanguage(targetLanguage, tokenKeyValue)) return true;
+            if (language == "en")
+            {
+                return false;
+            }
+            // Check of er iets staat na de ':'
+            var regex = new Regex(@":\s*$");
+            
+            if (regex.IsMatch(sourceTokenValue)) return false;
+
+            if (targetTokenValue == null) return true;
+            
+            if (!targetTokenValue.Contains(':') || !regex.IsMatch(targetTokenValue)) return false;
+            Logger.LogMessage($"Translating empty token value! {targetTokenValue}");
+            return true;
         }
     }
 }
