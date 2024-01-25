@@ -32,8 +32,8 @@ namespace DeeplTranslator
         {
             foreach (string file in files)
             {
-                string targetFileName = file.Substring(file.Length - 8).ToLower();
-                const string sourceFileName = "en-gb.js";
+                string targetFileName = file.Substring(file.Length - 9).ToLower();
+                const string sourceFileName = "en-gb.jsx";
                 string path = Path.GetDirectoryName(file) ?? throw new InvalidOperationException("file path is null");
 
                 if (targetFileName.Equals(sourceFileName)) continue;

@@ -241,10 +241,10 @@ namespace DeeplTranslator
         private string FormatTargetKey(string targetFileName)
         {
             // Define a regular expression pattern for the "en-gb" format
-            string pattern = @"^[a-z]{2}-[a-z]{2}\.js$";
+            string pattern = @"^[a-z]{2}-[a-z]{2}\.jsx$";
 
             // Use Regex.IsMatch to check if the input matches the pattern
-            if (!Regex.IsMatch(targetFileName, pattern, RegexOptions.IgnoreCase)) throw new FormatException($"{targetFileName} has an invalid file name. The correct format is 'en-gb.js'.");
+            if (!Regex.IsMatch(targetFileName, pattern, RegexOptions.IgnoreCase)) throw new FormatException($"{targetFileName} has an invalid file name. The correct format is 'en-gb.jsx'.");
             
             string languageCode = Path.GetFileNameWithoutExtension(targetFileName)[..2].ToLower() ?? throw new InvalidOperationException();
             string countryCode = Path.GetFileNameWithoutExtension(targetFileName)[3..].ToUpper() ?? throw new InvalidOperationException();

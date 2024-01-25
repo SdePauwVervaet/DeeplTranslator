@@ -15,3 +15,5 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DeeplTranslator
 build_property.ProjectDir = C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

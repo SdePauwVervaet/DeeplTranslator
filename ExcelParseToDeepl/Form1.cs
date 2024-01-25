@@ -196,12 +196,12 @@ namespace DeeplTranslator
 
             if (Directory.Exists(directoryPath))
             {
-                var jsFiles = Directory.GetFiles(directoryPath, "*.js", SearchOption.AllDirectories)
+                var jsFiles = Directory.GetFiles(directoryPath, "*.jsx", SearchOption.AllDirectories)
                     .ToList();
 
                 if (jsFiles.Count > 0)
                 {
-                    string[] exceptions = { "index.js", "i18n.js", "i18n-config.js" };
+                    string[] exceptions = { "index.jsx", "i18n.jsx", "i18n-config.jsx" };
                     foreach (string exc in exceptions)
                     {
                         jsFiles.RemoveAll(u => u.Contains(exc));
@@ -212,7 +212,7 @@ namespace DeeplTranslator
                 }
                 else
                 {
-                    MessageBox.Show(@"Folder is empty or does not contain any .js files.", @"No .js Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(@"Folder is empty or does not contain any .jsx files.", @"No .jsx Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else

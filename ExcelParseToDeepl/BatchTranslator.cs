@@ -180,6 +180,7 @@ namespace DeeplTranslator
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
             string glossaryName = $"{sourceLanguage}-{targetLanguage}";
+            Logger.LogMessage($"TargetLanguage: {targetLanguage}");
             bool useGlossary = await _glossaryManager.CheckForExistingGlossary(glossaryName);
             string logMessage = $"{sourceLanguage}: {translation}";
             TextResult translatedText;
