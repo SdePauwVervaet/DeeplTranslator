@@ -48,7 +48,7 @@ namespace DeeplTranslator
 
                 JObject targetLanguage = (JObject)fileObject[language];
 
-                var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(50);
+                var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(35);
                 foreach (var tokenBatch in tokenBatches)
                 {
                     var translationTasks = tokenBatch.Select(async token =>
@@ -180,7 +180,6 @@ namespace DeeplTranslator
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
             string glossaryName = $"{sourceLanguage}-{targetLanguage}";
-            Logger.LogMessage($"TargetLanguage: {targetLanguage}");
             bool useGlossary = await _glossaryManager.CheckForExistingGlossary(glossaryName);
             string logMessage = $"{sourceLanguage}: {translation}";
             TextResult translatedText;

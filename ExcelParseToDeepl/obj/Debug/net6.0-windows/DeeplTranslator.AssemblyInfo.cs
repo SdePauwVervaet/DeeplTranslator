@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DeeplTranslator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd2b98693beaaa625e914a8837a84776af81f51c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b40bbcdf25a84df50991cf2b7a96f4ee7aa6e00")]
 [assembly: System.Reflection.AssemblyProductAttribute("DeeplTranslator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DeeplTranslator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
