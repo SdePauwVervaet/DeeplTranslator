@@ -57,7 +57,6 @@ C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\De
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfoInputs.cache
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.AssemblyInfo.cs
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CoreCompileInputs.cache
-C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.csproj.CopyComplete
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.dll
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\refint\DeeplTranslator.dll
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.pdb
@@ -66,3 +65,4 @@ C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\re
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.Form1.resources
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.Properties.Resources.resources
 C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTranslator.sourcelink.json
+C:\Temp\Robs stuff\DeeplTranslator\ExcelParseToDeepl\obj\Debug\net6.0-windows\DeeplTra.D952E6B9.Up2Date
