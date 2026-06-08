@@ -13,6 +13,11 @@ namespace DeeplTranslator
         private const int BatchSize = 100;
         private readonly string[] _exceptions;
 
+        
+        private readonly SemaphoreSlim _rateLimitSemaphore;
+        private const int MaxConcurrentRequests = 12; // Limit concurrent API calls
+        private const int DelayBetweenRequests = 100; // 200ms delay between requests
+
 
         public BatchTranslator(string authKey, string[] exceptions)
         {
@@ -20,6 +25,8 @@ namespace DeeplTranslator
             this._exceptions = exceptions;
             this._glossaryManager = new GlossaryManager(authKey);
             this._jsonUtility = new JsonUtility();
+            this._rateLimitSemaphore = new SemaphoreSlim(MaxConcurrentRequests, MaxConcurrentRequests);
+
         }
 
         // Update translation alerts
@@ -48,31 +55,33 @@ namespace DeeplTranslator
 
                 JObject targetLanguage = (JObject)fileObject[language];
 
-                var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(35);
+                var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(10); // Reduced batch size
                 foreach (var tokenBatch in tokenBatches)
                 {
-                    var translationTasks = tokenBatch.Select(async token =>
+                    // Process tokens sequentially instead of concurrently
+                    foreach (var token in tokenBatch)
                     {
                         string tokenParent = token.Parent.ToString()!;
                         string pathToToken = token.Path;
                         string sourceTokenValue = token.Value<string>();
                         string tokenKeyValue = _jsonUtility.ExtractTokenKeyValue(tokenParent, token);
                         string? targetTokenValue = targetLanguage[tokenKeyValue]?.Value<string>();
-                        if (!TranslateEmptyToken(targetLanguage, tokenKeyValue, language, sourceTokenValue, targetTokenValue)) return;
+                        
+                        if (!TranslateEmptyToken(targetLanguage, tokenKeyValue, language, sourceTokenValue, targetTokenValue)) continue;
 
                         // Don't translate engine faults or exceptions
                         if (_exceptions.Any(exception => tokenKeyValue.Contains(exception)))
                         {
                             Console.WriteLine($@"Exception found. Not translating {tokenKeyValue} for {language}");
-                            return;
+                            continue;
                         }
 
-                        // Key doesn't exist in the target language, add it and translate the value
-                        string translatedValue = await HandleTranslationRequest(sourceTokenValue ?? throw new InvalidOperationException(), sourceLanguage, language);
-                        List<string> tokenPath;
                         try
                         {
-                            tokenPath = _jsonUtility.ExtractTokenPath(pathToToken, tokenKeyValue);
+                            // Key doesn't exist in the target language, add it and translate the value
+                            string translatedValue = await HandleTranslationRequest(sourceTokenValue ?? throw new InvalidOperationException(), sourceLanguage, language);
+                            List<string> tokenPath = _jsonUtility.ExtractTokenPath(pathToToken, tokenKeyValue);
+                            _jsonUtility.AddToJObjectKey(targetLanguage, tokenPath, translatedValue, tokenKeyValue);
                         }
                         catch (Exception e)
                         {
@@ -82,9 +91,7 @@ namespace DeeplTranslator
                             Logger.LogMessage("Please contact your administrator!");
                             throw;
                         }
-                        _jsonUtility.AddToJObjectKey(targetLanguage, tokenPath, translatedValue, tokenKeyValue);
-                    });
-                    await Task.WhenAll(translationTasks);
+                    }
                 }
                 Logger.LogMessage($"Finished translating for {language}!");
             }
@@ -116,10 +123,12 @@ namespace DeeplTranslator
             DateTime dateAndTime = DateTime.Now;
 
             var translationExceptions = new Dictionary<string, List<string>>();
-            var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(BatchSize);
+            var tokenBatches = source.Descendants().Where(t => t.Type == JTokenType.String).Batch(10); // Reduced batch size
+            
             foreach (var tokenBatch in tokenBatches)
             {
-                var translationTasks = tokenBatch.Select(async token =>
+                // Process tokens sequentially instead of concurrently
+                foreach (var token in tokenBatch)
                 {
                     string pathToToken = token.Path;
                     string tokenValue = token.Value<string>();
@@ -130,6 +139,7 @@ namespace DeeplTranslator
                         var examples = _jsonUtility.ExtractExceptions(tokenValue);
                         translationExceptions[pathToToken] = examples;
                     }
+                    
                     string logString;
 
                     if (target.SelectToken(pathToToken) == null)
@@ -158,9 +168,7 @@ namespace DeeplTranslator
                     }
 
                     csvString += logString;
-                });
-
-                await Task.WhenAll(translationTasks);
+                }
             }
 
             _jsonUtility.RemoveMissingKeys(target, source);
@@ -179,35 +187,48 @@ namespace DeeplTranslator
         
         private async Task<string> HandleTranslationRequest(string translation, string sourceLanguage, string targetLanguage)
         {
-            string glossaryName = $"{sourceLanguage}-{targetLanguage}";
-            bool useGlossary = await _glossaryManager.CheckForExistingGlossary(glossaryName);
-            string logMessage = $"{sourceLanguage}: {translation}";
-            TextResult translatedText;
-            if (useGlossary) //Translate with Glossary
+            // Add delay before making the request
+            await Task.Delay(DelayBetweenRequests);
+            
+            try
             {
-                GlossaryInfo? g = await _glossaryManager.GetGlossaryByName(glossaryName);
-
-                translatedText = await _translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage,
-                    new TextTranslateOptions { GlossaryId = g?.GlossaryId }
-                );
-                logMessage += " with glossary";
+                string glossaryName = $"{sourceLanguage}-{targetLanguage}";
+                bool useGlossary = await _glossaryManager.CheckForExistingGlossary(glossaryName);
+                string logMessage = $"{sourceLanguage}: {translation}";
+                TextResult translatedText;
+            
+                if (useGlossary) //Translate with Glossary
+                {
+                    GlossaryInfo? g = await _glossaryManager.GetGlossaryByName(glossaryName);
+                    translatedText = await _translator.TranslateTextAsync
+                    (
+                        translation,
+                        sourceLanguage,
+                        targetLanguage,
+                        new TextTranslateOptions { GlossaryId = g?.GlossaryId }
+                    );
+                    logMessage += " with glossary";
+                }
+                else //Translate without Glossary
+                {
+                    translatedText = await _translator.TranslateTextAsync
+                    (
+                        translation,
+                        sourceLanguage,
+                        targetLanguage
+                    );
+                    logMessage += " without glossary";
+                }
+                Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
+                return translatedText.ToString();
             }
-            else //Translate without Glossary
+            catch (TooManyRequestsException)
             {
-                translatedText = await _translator.TranslateTextAsync
-                (
-                    translation,
-                    sourceLanguage,
-                    targetLanguage
-                );
-                logMessage += " without glossary";
+                // Wait longer if we hit rate limit and retry
+                Logger.LogMessage("Rate limit hit, waiting 30 seconds before retry...");
+                await Task.Delay(30000); // Wait 30 seconds
+                return await HandleTranslationRequest(translation, sourceLanguage, targetLanguage); // Retry
             }
-            Logger.LogMessage($"Translating: {glossaryName}: {translatedText} -> {logMessage} -> {targetLanguage}: {translatedText}");
-            return translatedText.ToString();
         }
         
         private bool TranslateEmptyToken(JObject targetLanguage, string tokenKeyValue, string language, string sourceTokenValue, string? targetTokenValue)

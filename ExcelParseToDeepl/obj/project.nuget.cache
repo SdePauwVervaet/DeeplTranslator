@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oi2DGntV0HCavTdSDAbACHgBukiZ9OlWo8OrUqpNwEnxdAUnog4m9OQTPmyj8fIkGGCPkc+KwZjpi8fR1Re6Tw==",
+  "dgSpecHash": "3Dbd8VMTAWg=",
   "success": true,
-  "projectFilePath": "C:\\Temp\\Robs stuff\\DeeplTranslator\\ExcelParseToDeepl\\DeeplTranslator.csproj",
+  "projectFilePath": "C:\\0_VERVAET\\11_OTHER\\Robs stuff\\DeeplTranslator\\ExcelParseToDeepl\\DeeplTranslator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\deepl.net\\1.6.0\\deepl.net.1.6.0.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\documentformat.openxml\\2.11.3\\documentformat.openxml.2.11.3.nupkg.sha512",
@@ -14,20 +14,24 @@
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.extensions.options\\5.0.0\\microsoft.extensions.options.5.0.0.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\newtonsoft.json\\12.0.1\\newtonsoft.json.12.0.1.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\polly\\7.1.0\\polly.7.1.0.nupkg.sha512",
     "C:\\Users\\Sander.dePauw\\.nuget\\packages\\polly.extensions.http\\3.0.0\\polly.extensions.http.3.0.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\spreadsheetlight\\3.5.0\\spreadsheetlight.3.5.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\system.text.json\\5.0.2\\system.text.json.5.0.2.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.27\\microsoft.netcore.app.ref.6.0.27.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.27\\microsoft.windowsdesktop.app.ref.6.0.27.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.27\\microsoft.aspnetcore.app.ref.6.0.27.nupkg.sha512",
-    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.27\\microsoft.netcore.app.host.win-x64.6.0.27.nupkg.sha512"
+    "C:\\Users\\Sander.dePauw\\.nuget\\packages\\spreadsheetlight\\3.5.0\\spreadsheetlight.3.5.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Newtonsoft.Json' 12.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+      "projectPath": "C:\\0_VERVAET\\11_OTHER\\Robs stuff\\DeeplTranslator\\ExcelParseToDeepl\\DeeplTranslator.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\0_VERVAET\\11_OTHER\\Robs stuff\\DeeplTranslator\\ExcelParseToDeepl\\DeeplTranslator.csproj",
+      "libraryId": "Newtonsoft.Json",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    }
+  ]
 }
